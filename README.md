@@ -43,25 +43,21 @@ There, you find multiple pages:
 
 On this page, you can enable and configure the behaviour this tool.
 
-#### 1.1. Covered authentication methods
+#### 1.1. Authentication methods
 
-With this setting, you can configure which users are covered by this tool. If you select a particular authentication method, all users with this authentication method will become candidates for (suspension and) deletion. If you do not select a particular authentication method, all users with this authentication method will not be touched by this tool in any way.
+Here, you can configure which users are covered by this tool. If you select a particular authentication method, all users with this authentication method will become candidates for (suspension and) deletion. If you do not select a particular authentication method, all users with this authentication method will not be touched by this tool in any way.
 
-#### 1.2. User deletion period
+#### 1.2. User deletion
 
-With this setting, you can configure the number of days after which a user will be deleted by the tool.
+Here, you can configure the number of days after which a user will be deleted by the tool.
 
-This period is calculated based the user's registration date. The configured period is interpreted as full days. This means that the first, incomplete day when the user registers to Moodle, is not counted.
+#### 1.4. User suspension
 
-#### 1.3. Enable user suspension before deletion
+Here, you can optionally configure the number of days after which a user will be suspended by the tool.
 
-With this setting, you can configure the tool to suspend users before deleting them.
+#### 1.5 User overrides
 
-#### 1.4. User suspension period
-
-With this setting, you can configure the number of days after which a user will be suspended by the tool.
-
-This period is calculated based the user's registration date. The configured period is interpreted as full days. This means that the first, incomplete day when the user registers to Moodle, is not counted.
+Here, you can allow the admin to override deletion and suspension dates for individual users.
 
 ### 2. User list
 

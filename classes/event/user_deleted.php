@@ -57,8 +57,13 @@ class user_deleted extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        return get_string('eventuserdeleted_desc', 'tool_selfsignuphardlifecycle', array('userid' => $this->relateduserid,
-                'period' => $this->other['period']));
+        if (isset($this->other['overridden']) && $this->other['overridden'] == true) {
+            return get_string('eventuserdeletedoverridden_desc', 'tool_selfsignuphardlifecycle',
+                    array('userid' => $this->relateduserid));
+        } else {
+            return get_string('eventuserdeleted_desc', 'tool_selfsignuphardlifecycle', array('userid' => $this->relateduserid,
+                    'period' => $this->other['period']));
+        }
     }
 
     /**

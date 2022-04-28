@@ -45,6 +45,12 @@ if ($hassiteconfig) {
                 get_string('setting_userlifecyclestatic_desc', 'tool_selfsignuphardlifecycle', null, true));
         $page->add($setting);
 
+        // Create auth methods heading widget.
+        $setting = new admin_setting_heading('tool_selfsignuphardlifecycle/authmethodsheading',
+                get_string('setting_authmethodsheading', 'tool_selfsignuphardlifecycle', null, true),
+                '');
+        $page->add($setting);
+
         // Create auth method widget.
         $auths = core_component::get_plugin_list('auth');
         $authoptions = array();
@@ -63,12 +69,24 @@ if ($hassiteconfig) {
         $page->add($setting);
         unset($auths, $authoptions);
 
+        // Create user deletion heading widget.
+        $setting = new admin_setting_heading('tool_selfsignuphardlifecycle/userdeletionheading',
+                get_string('setting_userdeletionheading', 'tool_selfsignuphardlifecycle', null, true),
+                '');
+        $page->add($setting);
+
         // Create user deletion period widget.
         $setting = new admin_setting_configtext('tool_selfsignuphardlifecycle/userdeletionperiod',
                 get_string('setting_userdeletionperiod', 'tool_selfsignuphardlifecycle', null, true),
                 get_string('setting_userdeletionperiod_desc', 'tool_selfsignuphardlifecycle', null, true).'<br /><br />'.
                 get_string('setting_userperiodscalc_desc', 'tool_selfsignuphardlifecycle', null, true),
                 TOOL_SELFSIGNUPHARDLIFECYCLLE_DELETIONPERIOD_DEFAULT, PARAM_INT);
+        $page->add($setting);
+
+        // Create user suspension heading widget.
+        $setting = new admin_setting_heading('tool_selfsignuphardlifecycle/usersuspensionheading',
+                get_string('setting_usersuspensionheading', 'tool_selfsignuphardlifecycle', null, true),
+                '');
         $page->add($setting);
 
         // Create enable user suspension widget.
@@ -87,6 +105,78 @@ if ($hassiteconfig) {
                 TOOL_SELFSIGNUPHARDLIFECYCLLE_SUSPENSIONPERIOD_DEFAULT, PARAM_INT);
         $page->add($setting);
         $page->hide_if('tool_selfsignuphardlifecycle/usersuspensionperiod', 'tool_selfsignuphardlifecycle/enableusersuspension');
+
+        // Create user overrides heading widget.
+        $setting = new admin_setting_heading('tool_selfsignuphardlifecycle/useroverridesheading',
+                get_string('setting_useroverridesheading', 'tool_selfsignuphardlifecycle', null, true),
+                '');
+        $page->add($setting);
+
+        // Create enable user overrides widget.
+        $setting = new admin_setting_configcheckbox('tool_selfsignuphardlifecycle/enableuseroverrides',
+                get_string('setting_enableuseroverrides', 'tool_selfsignuphardlifecycle', null, true),
+                get_string('setting_enableuseroverrides_desc', 'tool_selfsignuphardlifecycle', null, true),
+                TOOL_SELFSIGNUPHARDLIFECYCLLE_ENABLEOVERRIDES_DEFAULT);
+        $page->add($setting);
+
+        // Get custom user profile fields options.
+        $userprofilefieldoptions = tool_selfsignuphardlifecycle_get_date_profilefield_options();
+
+        // If there aren't any custom user profile fields.
+        if (count($userprofilefieldoptions) < 1) {
+            // Build settings page link.
+            $url = new moodle_url('/user/profile/index.php');
+            $link = array('url' => $url->out(),
+                    'linktitle' => get_string('profilefields', 'admin', null, true),
+                    'fieldname' => get_string('pluginname', 'profilefield_datetime', null, true));
+
+            // Create empty user deletion override field widget to trigger a settings entry in the database.
+            $setting = new admin_setting_configempty('tool_selfsignuphardlifecycle/userdeletionoverridefield',
+                    get_string('setting_userdeletionoverridefield', 'tool_selfsignuphardlifecycle', null, true),
+                    get_string('setting_useroverridesnofieldyet_desc', 'tool_selfsignuphardlifecycle', $link, true));
+            $page->add($setting);
+            $page->hide_if('tool_selfsignuphardlifecycle/userdeletionoverridefield',
+                    'tool_selfsignuphardlifecycle/enableuseroverrides');
+
+            // Create empty user suspension override field widget to trigger a settings entry in the database.
+            $setting = new admin_setting_configempty('tool_selfsignuphardlifecycle/usersuspensionoverridefield',
+                    get_string('setting_usersuspensionoverridefield', 'tool_selfsignuphardlifecycle', null, true),
+                    get_string('setting_useroverridesnofieldyet_desc', 'tool_selfsignuphardlifecycle', $link, true));
+            $page->add($setting);
+            $page->hide_if('tool_selfsignuphardlifecycle/usersuspensionoverridefield',
+                    'tool_selfsignuphardlifecycle/enableuseroverrides');
+            $page->hide_if('tool_selfsignuphardlifecycle/usersuspensionoverridefield',
+                    'tool_selfsignuphardlifecycle/enableusersuspension');
+
+            unset ($link, $url);
+
+            // Otherwise, if there are fields.
+        } else {
+            // Create user deletion override field widget.
+            $setting = new admin_setting_configselect('tool_selfsignuphardlifecycle/userdeletionoverridefield',
+                    get_string('setting_userdeletionoverridefield', 'tool_selfsignuphardlifecycle', null, true),
+                    get_string('setting_userdeletionoverridefield_desc', 'tool_selfsignuphardlifecycle', null, true),
+                    '',
+                    $userprofilefieldoptions);
+            $page->add($setting);
+            $page->hide_if('tool_selfsignuphardlifecycle/userdeletionoverridefield',
+                    'tool_selfsignuphardlifecycle/enableuseroverrides');
+
+            // Create user suspension override field widget.
+            $setting = new admin_setting_configselect('tool_selfsignuphardlifecycle/usersuspensionoverridefield',
+                    get_string('setting_usersuspensionoverridefield', 'tool_selfsignuphardlifecycle', null, true),
+                    get_string('setting_usersuspensionoverridefield_desc', 'tool_selfsignuphardlifecycle', null, true).
+                            '<br /><br />'.
+                            get_string('setting_useroverridesrelation_desc', 'tool_selfsignuphardlifecycle', null, true),
+                    '',
+                    $userprofilefieldoptions);
+            $page->add($setting);
+            $page->hide_if('tool_selfsignuphardlifecycle/usersuspensionoverridefield',
+                    'tool_selfsignuphardlifecycle/enableuseroverrides');
+            $page->hide_if('tool_selfsignuphardlifecycle/usersuspensionoverridefield',
+                    'tool_selfsignuphardlifecycle/enableusersuspension');
+        }
+        unset($userprofilefieldoptions);
     }
 
     // Add settings page to navigation category.

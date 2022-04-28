@@ -52,6 +52,9 @@ class userlist_table extends \table_sql {
         // Get SQL snippets for covered auth methods.
         list($authinsql, $authsqlparams) = tool_selfsignuphardlifecycle_get_auth_sql();
 
+        // Get plugin config.
+        $config = get_config('tool_selfsignuphardlifecycle');
+
         // Set the sql for the table.
         $sqlfields = 'id, firstname, lastname, username, email, auth, suspended, timecreated';
         $sqlwhere = 'deleted = :deleted AND auth '.$authinsql;
@@ -59,25 +62,46 @@ class userlist_table extends \table_sql {
         $sqlparams['deleted'] = 0;
         $this->set_sql($sqlfields, '{user}', $sqlwhere, $sqlparams);
 
-        // Set the table columns.
-        $tablecolumns = array('id', 'firstname', 'lastname', 'username', 'email', 'auth', 'timecreated', 'accountstatus',
-                'nextstep');
+        // Set the table columns (depending if user overrides are enabled or not).
+        if (tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() == true) {
+            $tablecolumns = array('id', 'firstname', 'lastname', 'username', 'email', 'auth', 'timecreated',
+                    'accountstatus', 'accountoverridden', 'nextstep', 'profile');
+        } else {
+            $tablecolumns = array('id', 'firstname', 'lastname', 'username', 'email', 'auth', 'timecreated',
+                    'accountstatus', 'nextstep', 'profile');
+        }
         $this->define_columns($tablecolumns);
 
         // Allow table sorting.
         $this->sortable(true, 'id', SORT_ASC);
         $this->no_sorting('nextstep');
+        $this->no_sorting('profile');
 
-        // Set the table headers.
-        $tableheaders = array(get_string('userid', 'grades'),
-                get_string('firstname'),
-                get_string('lastname'),
-                get_string('username'),
-                get_string('email'),
-                get_string('col_auth', 'tool_selfsignuphardlifecycle'),
-                get_string('col_timecreated', 'tool_selfsignuphardlifecycle'),
-                get_string('col_accountstatus', 'tool_selfsignuphardlifecycle'),
-                get_string('col_nextstep', 'tool_selfsignuphardlifecycle'));
+        // Set the table headers (depending if user overrides are enabled or not).
+        if (tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() == true) {
+            $tableheaders = array(get_string('userid', 'grades'),
+                    get_string('firstname'),
+                    get_string('lastname'),
+                    get_string('username'),
+                    get_string('email'),
+                    get_string('col_auth', 'tool_selfsignuphardlifecycle'),
+                    get_string('col_timecreated', 'tool_selfsignuphardlifecycle'),
+                    get_string('col_accountstatus', 'tool_selfsignuphardlifecycle'),
+                    get_string('col_accountoverridden', 'tool_selfsignuphardlifecycle'),
+                    get_string('col_nextstep', 'tool_selfsignuphardlifecycle'),
+                    get_string('col_profile', 'tool_selfsignuphardlifecycle'));
+        } else {
+            $tableheaders = array(get_string('userid', 'grades'),
+                    get_string('firstname'),
+                    get_string('lastname'),
+                    get_string('username'),
+                    get_string('email'),
+                    get_string('col_auth', 'tool_selfsignuphardlifecycle'),
+                    get_string('col_timecreated', 'tool_selfsignuphardlifecycle'),
+                    get_string('col_accountstatus', 'tool_selfsignuphardlifecycle'),
+                    get_string('col_nextstep', 'tool_selfsignuphardlifecycle'),
+                    get_string('col_profile', 'tool_selfsignuphardlifecycle'));
+        }
         $this->define_headers($tableheaders);
     }
 
@@ -106,12 +130,43 @@ class userlist_table extends \table_sql {
             return tool_selfsignuphardlifecycle_userlist_get_accountstatus_string($row->suspended);
         }
 
+        // Inject account overridden column.
+        if ($column === 'accountoverridden') {
+            return tool_selfsignuphardlifecycle_userlist_get_accountoverridden_string($row->id);
+        }
+
         // Inject next step column.
         if ($column === 'nextstep') {
-            return tool_selfsignuphardlifecycle_userlist_get_nextstep_string($row->suspended, $row->timecreated);
+            return tool_selfsignuphardlifecycle_userlist_get_nextstep_string($row->id, $row->suspended,
+                    $row->timecreated);
+        }
+
+        // Inject profile column.
+        if ($column === 'profile') {
+            return tool_selfsignuphardlifecycle_userlist_get_profile_string($row->id);
         }
 
         // Call parent function.
         parent::other_cols($column, $row);
+    }
+
+    /**
+     * This function is not part of the public api.
+     */
+    public function print_nothing_to_display() {
+        global $OUTPUT;
+
+        // Render the dynamic table header.
+        echo $this->get_dynamic_table_html_start();
+
+        // Render button to allow user to reset table preferences.
+        echo $this->render_reset_button();
+
+        $this->print_initials_bar();
+
+        echo $OUTPUT->notification(get_string('emptytable', 'tool_selfsignuphardlifecycle'), 'info');
+
+        // Render the dynamic table footer.
+        echo $this->get_dynamic_table_html_end();
     }
 }
