@@ -4,7 +4,7 @@ moodle-tool_selfsignuphardlifecycle
 Changes
 -------
 
-### Unreleased
+### v3.9-r2
 
 * 2022-04-28 - Feature: Add possibility to override individual users.
 
