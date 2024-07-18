@@ -3,7 +3,7 @@ moodle-tool_selfsignuphardlifecycle
 
 [![Moodle Plugin CI](https://github.com/lernlink/moodle-tool_selfsignuphardlifecycle/workflows/Moodle%20Plugin%20CI/badge.svg?branch=master)](https://github.com/lernlink/moodle-tool_selfsignuphardlifecycle/actions?query=workflow%3A%22Moodle+Plugin+CI%22+branch%3Amaster)
 
-Moodle admin tool to suspend and delete based on their account creation date.
+Moodle admin tool to suspend and delete users based on their account creation date.
 
 
 Requirements
