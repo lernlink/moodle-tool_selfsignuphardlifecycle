@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$tasks = array(
-    array(
+$tasks = [
+    [
         'classname' => 'tool_selfsignuphardlifecycle\task\process_lifecycle',
         'blocking' => 1,
         'minute' => '1',
@@ -33,6 +33,6 @@ $tasks = array(
         'day' => '*',
         'dayofweek' => '*',
         'month' => '*',
-        'disabled' => 0
-    ),
-);
+        'disabled' => 0,
+    ],
+];

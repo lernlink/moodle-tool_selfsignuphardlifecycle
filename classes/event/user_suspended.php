@@ -59,10 +59,10 @@ class user_suspended extends \core\event\base {
     public function get_description() {
         if (isset($this->other['overridden']) && $this->other['overridden'] == true) {
             return get_string('eventusersuspendedoverridden_desc', 'tool_selfsignuphardlifecycle',
-                    array('userid' => $this->relateduserid));
+                    ['userid' => $this->relateduserid]);
         } else {
-            return get_string('eventusersuspended_desc', 'tool_selfsignuphardlifecycle', array('userid' => $this->relateduserid,
-                    'period' => $this->other['period']));
+            return get_string('eventusersuspended_desc', 'tool_selfsignuphardlifecycle', ['userid' => $this->relateduserid,
+                    'period' => $this->other['period']]);
         }
     }
 
@@ -72,6 +72,6 @@ class user_suspended extends \core\event\base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/user/view.php', array('id' => $this->relateduserid));
+        return new \moodle_url('/user/view.php', ['id' => $this->relateduserid]);
     }
 }

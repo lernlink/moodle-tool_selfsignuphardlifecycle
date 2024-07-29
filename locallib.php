@@ -98,7 +98,7 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
                     user_update_user($user, false, true);
 
                     // Verify if the user is suspended.
-                    $verifyuser = $DB->get_field('user', 'suspended', array('id' => $user->id), MUST_EXIST);
+                    $verifyuser = $DB->get_field('user', 'suspended', ['id' => $user->id], MUST_EXIST);
 
                     // If the suspension was successful.
                     if ($verifyuser == 1) {
@@ -106,14 +106,14 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
                         mtrace('... Success');
 
                         // Log event.
-                        $logevent = \tool_selfsignuphardlifecycle\event\user_suspended::create(array(
+                        $logevent = \tool_selfsignuphardlifecycle\event\user_suspended::create([
                                 'objectid' => $user->id,
                                 'relateduserid' => $user->id,
                                 'context' => context_user::instance($user->id),
-                                'other' => array(
-                                        'overridden' => true
-                                )
-                        ));
+                                'other' => [
+                                        'overridden' => true,
+                                ],
+                        ]);
                         $logevent->trigger();
 
                         // Otherwise.
@@ -143,14 +143,14 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
                         mtrace('... Success');
 
                         // Log event.
-                        $logevent = \tool_selfsignuphardlifecycle\event\user_deleted::create(array(
+                        $logevent = \tool_selfsignuphardlifecycle\event\user_deleted::create([
                                 'objectid' => $user->id,
                                 'relateduserid' => $user->id,
                                 'context' => context_user::instance($user->id),
-                                'other' => array(
-                                        'overridden' => true
-                                )
-                        ));
+                                'other' => [
+                                        'overridden' => true,
+                                ],
+                        ]);
                         $logevent->trigger();
 
                         // Otherwise.
@@ -231,14 +231,14 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
             mtrace('... Success');
 
             // Log event.
-            $logevent = \tool_selfsignuphardlifecycle\event\user_deleted::create(array(
+            $logevent = \tool_selfsignuphardlifecycle\event\user_deleted::create([
                     'objectid' => $user->id,
                     'relateduserid' => $user->id,
                     'context' => context_user::instance($user->id),
-                    'other' => array(
-                            'period' => $config->userdeletionperiod
-                    )
-            ));
+                    'other' => [
+                            'period' => $config->userdeletionperiod,
+                    ],
+            ]);
             $logevent->trigger();
 
             // Otherwise.
@@ -297,7 +297,7 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
             user_update_user($user, false, true);
 
             // Verify if the user is suspended.
-            $verifyuser = $DB->get_field('user', 'suspended', array('id' => $user->id), MUST_EXIST);
+            $verifyuser = $DB->get_field('user', 'suspended', ['id' => $user->id], MUST_EXIST);
 
             // If the suspension was successful.
             if ($verifyuser == 1) {
@@ -305,14 +305,14 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
                 mtrace('... Success');
 
                 // Log event.
-                $logevent = \tool_selfsignuphardlifecycle\event\user_suspended::create(array(
+                $logevent = \tool_selfsignuphardlifecycle\event\user_suspended::create([
                         'objectid' => $user->id,
                         'relateduserid' => $user->id,
                         'context' => context_user::instance($user->id),
-                        'other' => array(
-                                'period' => $config->usersuspensionperiod
-                        )
-                ));
+                        'other' => [
+                                'period' => $config->usersuspensionperiod,
+                        ],
+                ]);
                 $logevent->trigger();
 
                 // Otherwise.
@@ -422,7 +422,7 @@ function tool_selfsignuphardlifecycle_userlist_get_nextstep_string($userid, $sus
         }
 
         // Return string.
-        return get_string('nextstep_deletioncomingup', 'tool_selfsignuphardlifecycle', array('date' => $date));
+        return get_string('nextstep_deletioncomingup', 'tool_selfsignuphardlifecycle', ['date' => $date]);
 
         // If the user is not suspended.
     } else if ($suspended == 0) {
@@ -440,7 +440,7 @@ function tool_selfsignuphardlifecycle_userlist_get_nextstep_string($userid, $sus
             }
 
             // Return string.
-            return get_string('nextstep_suspensioncomingup', 'tool_selfsignuphardlifecycle', array('date' => $date));
+            return get_string('nextstep_suspensioncomingup', 'tool_selfsignuphardlifecycle', ['date' => $date]);
 
             // Otherwise.
         } else {
@@ -455,7 +455,7 @@ function tool_selfsignuphardlifecycle_userlist_get_nextstep_string($userid, $sus
             }
 
             // Return string.
-            return get_string('nextstep_deletioncomingup', 'tool_selfsignuphardlifecycle', array('date' => $date));
+            return get_string('nextstep_deletioncomingup', 'tool_selfsignuphardlifecycle', ['date' => $date]);
         }
 
         // Otherwise, if we got some other suspended status (This should not happen).
@@ -474,14 +474,14 @@ function tool_selfsignuphardlifecycle_userlist_get_nextstep_string($userid, $sus
 function tool_selfsignuphardlifecycle_userlist_get_profile_string($userid) {
 
     // First line: View profile.
-    $viewurl = new moodle_url('/user/profile.php', array('id' => $userid));
+    $viewurl = new moodle_url('/user/profile.php', ['id' => $userid]);
     $string = html_writer::link($viewurl, get_string('profileview', 'tool_selfsignuphardlifecycle'));
 
     // Separator.
     $string .= '&nbsp;&nbsp;|&nbsp;&nbsp;';
 
     // Second line: Edit profile.
-    $editurl = new moodle_url('/user/editadvanced.php', array('id' => $userid));
+    $editurl = new moodle_url('/user/editadvanced.php', ['id' => $userid]);
     $string .= html_writer::link($editurl, get_string('profileedit', 'tool_selfsignuphardlifecycle'));
 
     return $string;
@@ -554,7 +554,7 @@ function tool_selfsignuphardlifecycle_get_date_profilefield_options() {
     $profilefields = profile_get_custom_fields();
 
     // Prepare options array.
-    $options = array();
+    $options = [];
 
     // Iterate over the profilefields.
     foreach ($profilefields as $pf) {
@@ -598,16 +598,16 @@ function tool_selfsignuphardlifecycle_get_user_overrides($userid) {
     }
 
     // Use a static array to cache the results of this function as it might be called multiple times per user.
-    static $staticcache = array();
+    static $staticcache = [];
 
     // If we did not compose the overrides for the given user yet.
     if (isset($staticcache[$userid]) == false) {
         // Get the user's profile field values (we do this directly as there isn't a proper API function for our needs
         // and as the API does not cache these calls anyway).
-        $profilefielddata = $DB->get_records_menu('user_info_data', array('userid' => $userid), '', 'fieldid, data');
+        $profilefielddata = $DB->get_records_menu('user_info_data', ['userid' => $userid], '', 'fieldid, data');
 
         // Prepare overrides array.
-        $overrides = array();
+        $overrides = [];
 
         // Add the user's deletion override value.
         if (isset($profilefielddata[$config->userdeletionoverridefield]) &&

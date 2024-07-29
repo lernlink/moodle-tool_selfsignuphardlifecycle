@@ -64,11 +64,11 @@ class userlist_table extends \table_sql {
 
         // Set the table columns (depending if user overrides are enabled or not).
         if (tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() == true) {
-            $tablecolumns = array('id', 'firstname', 'lastname', 'username', 'email', 'auth', 'timecreated',
-                    'accountstatus', 'accountoverridden', 'nextstep', 'profile');
+            $tablecolumns = ['id', 'firstname', 'lastname', 'username', 'email', 'auth', 'timecreated',
+                    'accountstatus', 'accountoverridden', 'nextstep', 'profile'];
         } else {
-            $tablecolumns = array('id', 'firstname', 'lastname', 'username', 'email', 'auth', 'timecreated',
-                    'accountstatus', 'nextstep', 'profile');
+            $tablecolumns = ['id', 'firstname', 'lastname', 'username', 'email', 'auth', 'timecreated',
+                    'accountstatus', 'nextstep', 'profile'];
         }
         $this->define_columns($tablecolumns);
 
@@ -79,7 +79,7 @@ class userlist_table extends \table_sql {
 
         // Set the table headers (depending if user overrides are enabled or not).
         if (tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() == true) {
-            $tableheaders = array(get_string('userid', 'grades'),
+            $tableheaders = [get_string('userid', 'grades'),
                     get_string('firstname'),
                     get_string('lastname'),
                     get_string('username'),
@@ -89,9 +89,9 @@ class userlist_table extends \table_sql {
                     get_string('col_accountstatus', 'tool_selfsignuphardlifecycle'),
                     get_string('col_accountoverridden', 'tool_selfsignuphardlifecycle'),
                     get_string('col_nextstep', 'tool_selfsignuphardlifecycle'),
-                    get_string('col_profile', 'tool_selfsignuphardlifecycle'));
+                    get_string('col_profile', 'tool_selfsignuphardlifecycle')];
         } else {
-            $tableheaders = array(get_string('userid', 'grades'),
+            $tableheaders = [get_string('userid', 'grades'),
                     get_string('firstname'),
                     get_string('lastname'),
                     get_string('username'),
@@ -100,7 +100,7 @@ class userlist_table extends \table_sql {
                     get_string('col_timecreated', 'tool_selfsignuphardlifecycle'),
                     get_string('col_accountstatus', 'tool_selfsignuphardlifecycle'),
                     get_string('col_nextstep', 'tool_selfsignuphardlifecycle'),
-                    get_string('col_profile', 'tool_selfsignuphardlifecycle'));
+                    get_string('col_profile', 'tool_selfsignuphardlifecycle')];
         }
         $this->define_headers($tableheaders);
     }

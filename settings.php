@@ -53,7 +53,7 @@ if ($hassiteconfig) {
 
         // Create auth method widget.
         $auths = core_component::get_plugin_list('auth');
-        $authoptions = array();
+        $authoptions = [];
         if (!empty($auths)) {
             foreach ($auths as $auth => $unused) {
                 if (is_enabled_auth($auth)) {
@@ -64,7 +64,7 @@ if ($hassiteconfig) {
         $setting = new admin_setting_configmultiselect('tool_selfsignuphardlifecycle/coveredauth',
                         get_string('setting_coveredauth', 'tool_selfsignuphardlifecycle', null, true),
                         get_string('setting_coveredauth_desc', 'tool_selfsignuphardlifecycle', null, true),
-                        array(),
+                        [],
                         $authoptions);
         $page->add($setting);
         unset($auths, $authoptions);
@@ -126,9 +126,9 @@ if ($hassiteconfig) {
         if (count($userprofilefieldoptions) < 1) {
             // Build settings page link.
             $url = new moodle_url('/user/profile/index.php');
-            $link = array('url' => $url->out(),
+            $link = ['url' => $url->out(),
                     'linktitle' => get_string('profilefields', 'admin', null, true),
-                    'fieldname' => get_string('pluginname', 'profilefield_datetime', null, true));
+                    'fieldname' => get_string('pluginname', 'profilefield_datetime', null, true)];
 
             // Create empty user deletion override field widget to trigger a settings entry in the database.
             $setting = new admin_setting_configempty('tool_selfsignuphardlifecycle/userdeletionoverridefield',
