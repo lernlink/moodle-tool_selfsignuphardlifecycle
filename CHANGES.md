@@ -6,6 +6,7 @@ Changes
 
 ### Unreleased
 
+* 2024-07-29 - Add automated release to moodle.org/plugins
 * 2024-07-29 - Improvement: Exclude admins and guests from the user table.
 * 2024-07-29 - Make codechecker happy again
 * 2024-07-29 - Updated Moodle Plugin CI to latest upstream recommendations
