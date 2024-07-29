@@ -541,7 +541,31 @@ function tool_selfsignuphardlifecycle_get_auth_sql() {
     $coveredauth = explode(',', $config->coveredauth);
 
     // Return sql snippets for covered auth methods.
-    return $DB->get_in_or_equal($coveredauth, SQL_PARAMS_NAMED);
+    return $DB->get_in_or_equal($coveredauth, SQL_PARAMS_NAMED, 'auth', true);
+}
+
+/**
+ * Helper function to compose the SQL snippet for excluding admins and guests.
+ *
+ * @return array Array of insql and sqlparams.
+ */
+function tool_selfsignuphardlifecycle_get_adminandguest_sql() {
+    global $CFG, $DB;
+
+    // Get and explode site admins.
+    $siteadmins = explode(',', $CFG->siteadmins);
+
+    // Get the site guest.
+    $siteguest = $CFG->siteguest;
+
+    // If we have a guest ID (which may not always be the case).
+    if (!empty($siteguest)) {
+        // Push the guest into the array of admins (for the sake of simplicity).
+        array_push($siteadmins, $siteguest);
+    }
+
+    // Return sql snippets for excluding admins and guests.
+    return $DB->get_in_or_equal($siteadmins, SQL_PARAMS_NAMED, 'adm', false);
 }
 
 /**

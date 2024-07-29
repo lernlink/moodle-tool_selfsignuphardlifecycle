@@ -52,13 +52,16 @@ class userlist_table extends \table_sql {
         // Get SQL snippets for covered auth methods.
         list($authinsql, $authsqlparams) = tool_selfsignuphardlifecycle_get_auth_sql();
 
+        // Get SQL snippets for excludings admins and guests.
+        list($admininsql, $adminsqlparams) = tool_selfsignuphardlifecycle_get_adminandguest_sql();
+
         // Get plugin config.
         $config = get_config('tool_selfsignuphardlifecycle');
 
         // Set the sql for the table.
         $sqlfields = 'id, firstname, lastname, username, email, auth, suspended, timecreated';
-        $sqlwhere = 'deleted = :deleted AND auth '.$authinsql;
-        $sqlparams = $authsqlparams;
+        $sqlwhere = 'deleted = :deleted AND auth '.$authinsql.' AND id '.$admininsql;
+        $sqlparams = array_merge($authsqlparams, $adminsqlparams);
         $sqlparams['deleted'] = 0;
         $this->set_sql($sqlfields, '{user}', $sqlwhere, $sqlparams);
 
