@@ -163,7 +163,8 @@ Feature: The hard life cycle for self-signup users tool allows admins to get rid
       | user4    | User      | 4        | user4@example.com | email | 1         | ## 201 days ago ## |
     And I log in as "admin"
     And I navigate to "Users > Accounts > User profile fields" in site administration
-    And I set the field "datatype" to "Date/Time"
+    And I click on "Create a new profile field" "link"
+    And I click on "Date/Time" "link"
     And I set the following fields to these values:
       | Short name (must be unique)   | deletionoverride |
       | Name                          | Deletion day     |
@@ -172,7 +173,8 @@ Feature: The hard life cycle for self-signup users tool allows admins to get rid
       | End year                      | 2050             |
       | Include time?                 | 0                  |
     And I click on "Save changes" "button"
-    And I set the field "datatype" to "Date/Time"
+    And I click on "Create a new profile field" "link"
+    And I click on "Date/Time" "link"
     And I set the following fields to these values:
       | Short name (must be unique)   | suspensionoverride |
       | Name                          | Suspension day     |
