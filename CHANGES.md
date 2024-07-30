@@ -4,7 +4,7 @@ moodle-tool_selfsignuphardlifecycle
 Changes
 -------
 
-### Unreleased
+### v3.9-r3
 
 * 2024-07-29 - Add automated release to moodle.org/plugins
 * 2024-07-29 - Improvement: Exclude admins and guests from the user table.
