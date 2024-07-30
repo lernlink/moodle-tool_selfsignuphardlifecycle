@@ -125,7 +125,7 @@ class userlist_table extends \table_sql {
 
         // Inject timecreated column.
         if ($column === 'timecreated') {
-            return strftime(get_string('strftimedate'), $row->timecreated);
+            return \core_date::strftime(get_string('strftimedate'), (int) $row->timecreated);
         }
 
         // Inject account status column.

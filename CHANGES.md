@@ -6,6 +6,7 @@ Changes
 
 ### Unreleased
 
+* 2024-07-28 - Cleanup: Replace deprecated strftime() function with \core_date::strftime() function.
 * 2024-07-28 - Prepare compatibility for Moodle 4.1.
 
 ### v3.9-r3

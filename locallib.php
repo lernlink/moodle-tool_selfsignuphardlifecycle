@@ -414,7 +414,7 @@ function tool_selfsignuphardlifecycle_userlist_get_nextstep_string($userid, $sus
         // If the user deletion is overridden.
         if (tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() == true &&
                 $useroverrides['deletion'] != false) {
-            $date = strftime(get_string('strftimedaydate'), $useroverrides['deletion']);
+            $date = \core_date::strftime(get_string('strftimedaydate'), (int) $useroverrides['deletion']);
 
             // Otherwise.
         } else {
@@ -432,7 +432,7 @@ function tool_selfsignuphardlifecycle_userlist_get_nextstep_string($userid, $sus
             // If the user suspension is overridden.
             if (tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() == true &&
                     $useroverrides['suspension'] != false) {
-                $date = strftime(get_string('strftimedaydate'), $useroverrides['suspension']);
+                $date = \core_date::strftime(get_string('strftimedaydate'), (int) $useroverrides['suspension']);
 
                 // Otherwise.
             } else {
@@ -447,7 +447,7 @@ function tool_selfsignuphardlifecycle_userlist_get_nextstep_string($userid, $sus
             // If the user deletion is overridden.
             if (tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() == true &&
                     $useroverrides['deletion'] != false) {
-                $date = strftime(get_string('strftimedaydate'), $useroverrides['deletion']);
+                $date = \core_date::strftime(get_string('strftimedaydate'), (int) $useroverrides['deletion']);
 
                 // Otherwise.
             } else {
@@ -504,7 +504,7 @@ function tool_selfsignuphardlifecycle_userlist_calculate_nextstep_date($timecrea
     $date->modify('+ '.($period + 1).' days');
 
     // Compose and return string representation.
-    return strftime(get_string('strftimedaydate'), $date->getTimestamp());
+    return \core_date::strftime(get_string('strftimedaydate'), (int) $date->getTimestamp());
 }
 
 /**
