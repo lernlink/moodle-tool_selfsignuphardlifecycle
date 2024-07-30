@@ -4,6 +4,10 @@ moodle-tool_selfsignuphardlifecycle
 Changes
 -------
 
+### Unreleased
+
+* 2024-07-28 - Prepare compatibility for Moodle 4.2.
+
 ### v4.1-r1
 
 * 2024-07-28 - Upgrade: Fix a Behat test which broke von Moodle 4.1.
