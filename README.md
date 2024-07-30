@@ -9,7 +9,7 @@ Moodle admin tool to suspend and delete users based on their account creation da
 Requirements
 ------------
 
-This plugin requires Moodle 3.9+
+This plugin requires Moodle 4.1+
 
 
 Motivation for this plugin
