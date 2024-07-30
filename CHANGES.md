@@ -4,6 +4,10 @@ moodle-tool_selfsignuphardlifecycle
 Changes
 -------
 
+### Unreleased
+
+* 2024-07-28 - Prepare compatibility for Moodle 4.3.
+
 ### v4.2-r1
 
 * 2024-07-28 - Prepare compatibility for Moodle 4.2.
