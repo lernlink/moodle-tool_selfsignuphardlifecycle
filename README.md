@@ -59,6 +59,10 @@ Here, you can optionally configure the number of days after which a user will be
 
 Here, you can allow the admin to override deletion and suspension dates for individual users.
 
+#### 1.6 Cohort exceptions
+
+Here, you can optionally configure cohorts which should be ignored by the tool.
+
 ### 2. User list
 
 On this page, there is a list which shows all users which are covered by this tool according to the current configuration. You will also see the current status of each user and when the next step of the user's hard lifecycle will happen.

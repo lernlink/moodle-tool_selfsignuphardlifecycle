@@ -6,8 +6,8 @@ Feature: The hard life cycle for self-signup users tool allows admins to get rid
 
   Background:
     Given the following config values are set as admin:
-      | coveredauth | email | tool_selfsignuphardlifecycle |
-      | userdeletionperiod | 200 | tool_selfsignuphardlifecycle |
+      | coveredauth        | email | tool_selfsignuphardlifecycle |
+      | userdeletionperiod | 200   | tool_selfsignuphardlifecycle |
 
   Scenario: Manual authenticated users remain untouched by the tool
     Given the following "users" exist:
@@ -249,3 +249,50 @@ Feature: The hard life cycle for self-signup users tool allows admins to get rid
     And I should not see "User 3" in the "#users" "css_element"
     And I should see "User 4" in the "#users" "css_element"
     And ".usersuspended" "css_element" should exist in the "User 4" "table_row"
+
+  @javascript
+  Scenario: Users from ignored cohorts remain untouched by the tool
+    Given the following "users" exist:
+      | username | firstname | lastname | email             | auth  | suspended | timecreated        |
+      # User 1 will be ignored as he is a member of an ignored cohort.
+      | user1    | User      | 1        | user1@example.com | email | 0         | ## 201 days ago ## |
+      # User 2 will be suspended as he is not a member of an ignored cohort.
+      | user2    | User      | 2        | user2@example.com | email | 0         | ## 201 days ago ## |
+      # User 3 will be suspended as he is not a member of any cohort at all.
+      | user3    | User      | 3        | user3@example.com | email | 0         | ## 201 days ago ## |
+    And the following "cohorts" exist:
+      | name     | idnumber |
+      | Cohort 1 | C1       |
+      | Cohort 2 | C2       |
+      | Cohort 3 | C3       |
+    And the following "cohort members" exist:
+      | user  | cohort |
+      | user1 | C1     |
+      | user2 | C2     |
+    And I log in as "admin"
+    And I navigate to "Users > Hard life cycle for self-signup users > Settings" in site administration
+    And I set the field "Enable cohort exceptions" to "1"
+    And I click on ".form-autocomplete-downarrow" "css_element" in the "#admin-cohortexceptions" "css_element"
+    And I click on "Cohort 1" item in the autocomplete list
+    And I click on "Cohort 3" item in the autocomplete list
+    And I press the escape key
+    And I click on "Save changes" "button"
+
+    When I navigate to "Users > Hard life cycle for self-signup users > User list" in site administration
+    Then I should not see "user1" in the "#region-main" "css_element"
+    And I should see "user2" in the "#region-main" "css_element"
+    And I should see "user2" in the "#region-main" "css_element"
+
+    And I navigate to "Users > Accounts > Browse list of users" in site administration
+    Then I should see "User 1" in the "#users" "css_element"
+    And I should see "User 2" in the "#users" "css_element"
+    And I should see "User 3" in the "#users" "css_element"
+    And ".usersuspended" "css_element" should not exist in the "User 1" "table_row"
+    And ".usersuspended" "css_element" should not exist in the "User 2" "table_row"
+    And ".usersuspended" "css_element" should not exist in the "User 3" "table_row"
+    And I run the scheduled task "tool_selfsignuphardlifecycle\task\process_lifecycle"
+    And I reload the page
+    Then I should see "User 1" in the "#users" "css_element"
+    And I should not see "User 2" in the "#users" "css_element"
+    And I should not see "User 3" in the "#users" "css_element"
+    And ".usersuspended" "css_element" should not exist in the "User 1" "table_row"

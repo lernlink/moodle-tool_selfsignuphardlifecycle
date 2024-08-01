@@ -45,8 +45,14 @@ $string['privacy:metadata'] = 'The hard life cycle for self-signup users plugin 
 $string['profileedit'] = 'Edit';
 $string['profileview'] = 'View';
 $string['setting_authmethodsheading'] = 'Authentication methods';
+$string['setting_cohortexceptionsheading'] = 'Cohort exceptions';
+$string['setting_cohortexceptions'] = 'Cohorts to ignore';
+$string['setting_cohortexceptions_desc'] = 'With this setting, you can configure the cohorts whose members should be ignored. Each member of one of the selected cohorts will be completely ignored by this tool.';
+$string['setting_cohortexceptionsnocohortyet_desc'] = 'With this setting, you can configure the cohorts whose members should be ignored. There isn\'t any usable cohort yet. Please go to <a href="{$a->url}">{$a->linktitle}</a> and create a cohort first.';
 $string['setting_coveredauth'] = 'Covered authentication methods';
 $string['setting_coveredauth_desc'] = 'With this setting, you can configure which users are covered by this tool. If you select a particular authentication method, all users with this authentication method will become candidates for (suspension and) deletion. If you do not select a particular authentication method, all users with this authentication method will not be touched by this tool in any way.';
+$string['setting_enablecohortexceptions'] = 'Enable cohort exceptions';
+$string['setting_enablecohortexceptions_desc'] = 'With this setting, you can define cohort exceptions.';
 $string['setting_enableuseroverrides'] = 'Enable user overrides';
 $string['setting_enableuseroverrides_desc'] = 'With this setting, you can allow the admin to override deletion and suspension dates for individual users.';
 $string['setting_enableusersuspension'] = 'Enable user suspension before deletion';
