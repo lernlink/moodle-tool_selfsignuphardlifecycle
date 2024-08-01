@@ -27,6 +27,7 @@ define('TOOL_SELFSIGNUPHARDLIFECYCLLE_DELETIONPERIOD_DEFAULT', 200);
 define('TOOL_SELFSIGNUPHARDLIFECYCLLE_SUSPENSIONPERIOD_DEFAULT', 100);
 define('TOOL_SELFSIGNUPHARDLIFECYCLLE_ENABLESUSPENSION_DEFAULT', 1);
 define('TOOL_SELFSIGNUPHARDLIFECYCLLE_ENABLEOVERRIDES_DEFAULT', 0);
+define('TOOL_SELFSIGNUPHARDLIFECYCLLE_ENABLECOHORTEXCEPTIONS_DEFAULT', 0);
 
 
 /**
@@ -51,6 +52,10 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
     // Get SQL snippets for covered auth methods.
     list($authinsql, $authsqlparams) = tool_selfsignuphardlifecycle_get_auth_sql();
 
+    // Get SQL subquery for ignoring cohorts.
+    list($cohortexceptionswhere, $cohortexceptionsparams) =
+            tool_selfsignuphardlifecycle_get_cohort_exceptions_sql();
+
     // PHASE 1: Overridden users.
 
     // Do only if user override is enabled.
@@ -61,6 +66,7 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
         $usersparams['deleted'] = 0;
         $usersparams['deletionoverridefieldid'] = $config->userdeletionoverridefield;
         $usersparams['suspensionoverridefieldid'] = $config->usersuspensionoverridefield;
+        $usersparams = array_merge($usersparams, $cohortexceptionsparams);
         $userssql = 'SELECT u.*,
                            (SELECT uid.data
                             FROM {user_info_data} uid
@@ -73,7 +79,7 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
                             AND uid.fieldid = :suspensionoverridefieldid
                            ) AS suspensionoverride
                        FROM {user} u
-                       WHERE u.auth '.$authinsql.'
+                       WHERE u.auth '.$authinsql.' '.$cohortexceptionswhere.'
                        AND u.deleted = :deleted
                        ORDER BY u.id ASC';
         $usersrs = $DB->get_recordset_sql($userssql, $usersparams);
@@ -194,11 +200,13 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
     $deleteusersparams['timecreated'] = $userdeletiondatets;
     $deleteusersparams['suspended'] = 1;
     $deleteusersparams['deleted'] = 0;
+    $deleteusersparams = array_merge($deleteusersparams, $cohortexceptionsparams);
     $deleteuserssql = 'SELECT *
                        FROM {user}
                        WHERE auth '.$authinsql.'
                        AND timecreated < :timecreated '.
-                       $suspendedsqlsnippet.'
+                       $suspendedsqlsnippet.' '.
+                       $cohortexceptionswhere.'
                        AND deleted = :deleted
                        ORDER BY id ASC';
     $deleteusersrs = $DB->get_recordset_sql($deleteuserssql, $deleteusersparams);
@@ -263,10 +271,12 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
         $suspendusersparams['timecreated'] = $usersuspensiondatets;
         $suspendusersparams['suspended'] = 0;
         $suspendusersparams['deleted'] = 0;
+        $suspendusersparams = array_merge($suspendusersparams, $cohortexceptionsparams);
         $suspenduserssql = 'SELECT *
                        FROM {user}
                        WHERE auth ' . $authinsql . '
-                       AND timecreated < :timecreated
+                       AND timecreated < :timecreated '.
+                       $cohortexceptionswhere.'
                        AND suspended = :suspended
                        AND deleted = :deleted
                        ORDER BY id ASC';
@@ -701,4 +711,56 @@ function tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() {
 
     // Return the result.
     return $retvalue;
+}
+
+/**
+ * Helper function to get the SQL WHERE subquery for the cohorts which should be ignored by the plugin.
+ *
+ * @return array An array with two elements:
+ *               The first element is a SQL WHERE snippet.
+ *               The second element is a param array.
+ */
+function tool_selfsignuphardlifecycle_get_cohort_exceptions_sql() {
+    global $DB;
+
+    // Get plugin config.
+    $config = get_config('tool_selfsignuphardlifecycle');
+
+    // If cohort exceptions are not enabled, return an all-empty array.
+    if ($config->enablecohortexceptions == false) {
+        return ['', []];
+    }
+
+    // Use a static array to cache the results of this function as it might be called multiple times per user.
+    static $cohortexceptions = [];
+    static $staticcachebuilt = false;
+
+    // If we did not compose the cohort exceptions yet.
+    if ($staticcachebuilt === false) {
+        // Explode the cohort exception configuration.
+        $cohorts = explode(',', $config->cohortexceptions);
+
+        // If no cohorts are set, return an all-empty array.
+        if (count($cohorts) < 1) {
+            return ['', []];
+        }
+
+        // Compose the WHERE subquery.
+        list($whereinsql, $whereinparams) = $DB->get_in_or_equal($cohorts, SQL_PARAMS_NAMED, 'cohort', true);
+        $where = 'AND NOT EXISTS (
+                SELECT 1
+                FROM {cohort_members}
+                WHERE {cohort_members}.userid = {user}.id
+                AND {cohort_members}.cohortid '.$whereinsql.'
+            )';
+
+        // Compose the cohort exceptions array.
+        $cohortexceptions = [$where, $whereinparams];
+
+        // Remember that we have built it.
+        $staticcachebuilt = true;
+    }
+
+    // Return the cohort exceptions array.
+    return $cohortexceptions;
 }

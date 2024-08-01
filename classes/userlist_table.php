@@ -55,15 +55,20 @@ class userlist_table extends \table_sql {
         // Get SQL snippets for excludings admins and guests.
         list($admininsql, $adminsqlparams) = tool_selfsignuphardlifecycle_get_adminandguest_sql();
 
+        // Get SQL subquery for ignoring cohorts.
+        list($cohortexceptionswhere, $cohortexceptionsparams) =
+                tool_selfsignuphardlifecycle_get_cohort_exceptions_sql();
+
         // Get plugin config.
         $config = get_config('tool_selfsignuphardlifecycle');
 
         // Set the sql for the table.
         $sqlfields = 'id, firstname, lastname, username, email, auth, suspended, timecreated';
-        $sqlwhere = 'deleted = :deleted AND auth '.$authinsql.' AND id '.$admininsql;
-        $sqlparams = array_merge($authsqlparams, $adminsqlparams);
+        $sqlfrom = '{user}';
+        $sqlwhere = 'deleted = :deleted AND auth '.$authinsql.' AND id '.$admininsql.' '.$cohortexceptionswhere;
+        $sqlparams = array_merge($authsqlparams, $adminsqlparams, $cohortexceptionsparams);
         $sqlparams['deleted'] = 0;
-        $this->set_sql($sqlfields, '{user}', $sqlwhere, $sqlparams);
+        $this->set_sql($sqlfields, $sqlfrom, $sqlwhere, $sqlparams);
 
         // Set the table columns (depending if user overrides are enabled or not).
         if (tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() == true) {
