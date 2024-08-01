@@ -4,6 +4,10 @@ moodle-tool_selfsignuphardlifecycle
 Changes
 -------
 
+### Unreleased
+
+* 2024-07-30 - Feature: Allow the admin to configure cohorts which should be ignored by the tool.
+
 ### v4.1-r1
 
 * 2024-07-28 - Upgrade: Fix a Behat test which broke von Moodle 4.1.
