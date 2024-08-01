@@ -4,7 +4,7 @@ moodle-tool_selfsignuphardlifecycle
 Changes
 -------
 
-### Unreleased
+### v4.2-r2
 
 * 2024-07-30 - Feature: Allow the admin to configure cohorts which should be ignored by the tool.
 
