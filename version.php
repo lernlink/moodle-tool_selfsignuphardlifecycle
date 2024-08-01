@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'tool_selfsignuphardlifecycle';
-$plugin->version = 2023042400;
+$plugin->version = 2023042401;
 $plugin->release = 'v4.2-r1';
 $plugin->requires = 2023042400;
 $plugin->supported = [402, 402];

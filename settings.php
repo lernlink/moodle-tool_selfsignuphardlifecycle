@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use tool_selfsignuphardlifecycle\admin_setting_configmultiselect_autocomplete;
+
 defined('MOODLE_INTERNAL') || die;
 
 global $CFG;
@@ -38,6 +40,9 @@ if ($hassiteconfig) {
     if ($ADMIN->fulltree) {
         // Require the necessary libraries.
         require_once($CFG->dirroot . '/admin/tool/selfsignuphardlifecycle/locallib.php');
+
+        // Require cohort library.
+        require_once($CFG->dirroot . '/cohort/lib.php');
 
         // Create hard life cycle description static widget.
         $setting = new admin_setting_heading('tool_selfsignuphardlifecycle/userlifecyclestatic',
@@ -177,6 +182,56 @@ if ($hassiteconfig) {
                     'tool_selfsignuphardlifecycle/enableusersuspension');
         }
         unset($userprofilefieldoptions);
+
+        // Create cohort exceptions heading widget.
+        $setting = new admin_setting_heading('tool_selfsignuphardlifecycle/cohortexceptionsheading',
+            get_string('setting_cohortexceptionsheading', 'tool_selfsignuphardlifecycle', null, true),
+            '');
+        $page->add($setting);
+
+        // Create enable cohort exceptions widget.
+        $setting = new admin_setting_configcheckbox('tool_selfsignuphardlifecycle/enablecohortexceptions',
+            get_string('setting_enablecohortexceptions', 'tool_selfsignuphardlifecycle', null, true),
+            get_string('setting_enablecohortexceptions_desc', 'tool_selfsignuphardlifecycle', null, true),
+            TOOL_SELFSIGNUPHARDLIFECYCLLE_ENABLECOHORTEXCEPTIONS_DEFAULT);
+        $page->add($setting);
+
+        // Get cohort options.
+        $cohortdata = cohort_get_all_cohorts(0, 0);
+        $cohortoptions = [];
+        foreach ($cohortdata['cohorts'] as $cohort) {
+            $cohortoptions[$cohort->id] = $cohort->name;
+        }
+
+        // If there aren't any cohorts yet.
+        if (count($cohortoptions) < 1) {
+            // Build settings page link.
+            $url = new moodle_url('/cohort/index.php');
+            $link = ['url' => $url->out(), 'linktitle' => get_string('cohorts', 'core_cohort', null, true)];
+
+            // Create empty cohort exceptions field widget to trigger a settings entry in the database.
+            $setting = new admin_setting_configempty('tool_selfsignuphardlifecycle/cohortexceptions',
+                    get_string('setting_cohortexceptions', 'tool_selfsignuphardlifecycle', null, true),
+                    get_string('setting_cohortexceptionsnocohortyet_desc', 'tool_selfsignuphardlifecycle', $link, true));
+            $page->add($setting);
+            $page->hide_if('tool_selfsignuphardlifecycle/cohortexceptions',
+                    'tool_selfsignuphardlifecycle/enablecohortexceptions');
+
+            unset ($link, $url);
+
+            // Otherwise, if there are cohorts.
+        } else {
+            // Create user deletion override field widget.
+            $setting = new admin_setting_configmultiselect_autocomplete('tool_selfsignuphardlifecycle/cohortexceptions',
+                    get_string('setting_cohortexceptions', 'tool_selfsignuphardlifecycle', null, true),
+                    get_string('setting_cohortexceptions_desc', 'tool_selfsignuphardlifecycle', null, true),
+                    [],
+                    $cohortoptions);
+            $page->add($setting);
+            $page->hide_if('tool_selfsignuphardlifecycle/cohortexceptions',
+                    'tool_selfsignuphardlifecycle/enablecohortexceptions');
+        }
+        unset($cohortoptions);
     }
 
     // Add settings page to navigation category.
