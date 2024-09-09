@@ -201,14 +201,14 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
     $deleteusersparams['suspended'] = 1;
     $deleteusersparams['deleted'] = 0;
     $deleteusersparams = array_merge($deleteusersparams, $cohortexceptionsparams);
-    $deleteuserssql = 'SELECT *
-                       FROM {user}
-                       WHERE auth '.$authinsql.'
-                       AND timecreated < :timecreated '.
+    $deleteuserssql = 'SELECT u.*
+                       FROM {user} u
+                       WHERE u.auth '.$authinsql.'
+                       AND u.timecreated < :timecreated '.
                        $suspendedsqlsnippet.' '.
                        $cohortexceptionswhere.'
-                       AND deleted = :deleted
-                       ORDER BY id ASC';
+                       AND u.deleted = :deleted
+                       ORDER BY u.id ASC';
     $deleteusersrs = $DB->get_recordset_sql($deleteuserssql, $deleteusersparams);
 
     // Iterate over these users.
@@ -272,14 +272,14 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
         $suspendusersparams['suspended'] = 0;
         $suspendusersparams['deleted'] = 0;
         $suspendusersparams = array_merge($suspendusersparams, $cohortexceptionsparams);
-        $suspenduserssql = 'SELECT *
-                       FROM {user}
-                       WHERE auth ' . $authinsql . '
-                       AND timecreated < :timecreated '.
+        $suspenduserssql = 'SELECT u.*
+                       FROM {user} u
+                       WHERE u.auth ' . $authinsql . '
+                       AND u.timecreated < :timecreated '.
                        $cohortexceptionswhere.'
-                       AND suspended = :suspended
-                       AND deleted = :deleted
-                       ORDER BY id ASC';
+                       AND u.suspended = :suspended
+                       AND u.deleted = :deleted
+                       ORDER BY u.id ASC';
         $suspendusersrs = $DB->get_recordset_sql($suspenduserssql, $suspendusersparams);
 
         // Iterate over these users.
@@ -750,7 +750,7 @@ function tool_selfsignuphardlifecycle_get_cohort_exceptions_sql() {
         $where = 'AND NOT EXISTS (
                 SELECT 1
                 FROM {cohort_members}
-                WHERE {cohort_members}.userid = {user}.id
+                WHERE {cohort_members}.userid = u.id
                 AND {cohort_members}.cohortid '.$whereinsql.'
             )';
 
