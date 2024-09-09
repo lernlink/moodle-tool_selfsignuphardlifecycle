@@ -8,6 +8,8 @@ Feature: The hard life cycle for self-signup users tool allows admins to get rid
     Given the following config values are set as admin:
       | coveredauth        | email | tool_selfsignuphardlifecycle |
       | userdeletionperiod | 200   | tool_selfsignuphardlifecycle |
+    # Make the window large enough to allow Behat to work on the user list table properly
+    And I change window size to "large"
 
   Scenario: Manual authenticated users remain untouched by the tool
     Given the following "users" exist:
