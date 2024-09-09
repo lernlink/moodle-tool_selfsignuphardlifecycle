@@ -63,9 +63,9 @@ class userlist_table extends \table_sql {
         $config = get_config('tool_selfsignuphardlifecycle');
 
         // Set the sql for the table.
-        $sqlfields = 'id, firstname, lastname, username, email, auth, suspended, timecreated';
-        $sqlfrom = '{user}';
-        $sqlwhere = 'deleted = :deleted AND auth '.$authinsql.' AND id '.$admininsql.' '.$cohortexceptionswhere;
+        $sqlfields = 'u.id, u.firstname, u.lastname, u.username, u.email, u.auth, u.suspended, u.timecreated';
+        $sqlfrom = '{user} u';
+        $sqlwhere = 'u.deleted = :deleted AND u.auth '.$authinsql.' AND u.id '.$admininsql.' '.$cohortexceptionswhere;
         $sqlparams = array_merge($authsqlparams, $adminsqlparams, $cohortexceptionsparams);
         $sqlparams['deleted'] = 0;
         $this->set_sql($sqlfields, $sqlfrom, $sqlwhere, $sqlparams);
