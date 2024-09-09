@@ -173,6 +173,8 @@ Feature: The hard life cycle for self-signup users tool allows admins to get rid
       | End year                      | 2050             |
       | Include time?                 | 0                  |
     And I click on "Save changes" "button"
+    # Reload the page to avoid any Behat hickups with the modal popup
+    And I reload the page
     And I click on "Create a new profile field" "link"
     And I click on "Date/Time" "link"
     And I set the following fields to these values:
