@@ -4,6 +4,10 @@ moodle-tool_selfsignuphardlifecycle
 Changes
 -------
 
+### Unreleased
+
+* 2025-03-17 - Prepare compatibility for Moodle 4.4.
+
 ### v4.3-r3
 
 * 2024-09-09 - Bugfix: The cohort exceptions feature was not working correctly on MariaDB.
