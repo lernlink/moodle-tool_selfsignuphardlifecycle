@@ -6,6 +6,7 @@ Changes
 
 ### Unreleased
 
+* 2025-03-17 - Upgrade: Adopt changes from MDL-66903 and use new \core\component class.
 * 2025-03-17 - Prepare compatibility for Moodle 4.5.
 
 ### v4.4-r2

@@ -57,7 +57,7 @@ if ($hassiteconfig) {
         $page->add($setting);
 
         // Create auth method widget.
-        $auths = core_component::get_plugin_list('auth');
+        $auths = \core\component::get_plugin_list('auth');
         $authoptions = [];
         if (!empty($auths)) {
             foreach ($auths as $auth => $unused) {
