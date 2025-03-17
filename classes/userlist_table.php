@@ -36,7 +36,7 @@ require_once($CFG->dirroot.'/lib/tablelib.php');
  * @copyright   2022 Alexander Bias, lern.link GmbH <alexander.bias@lernlink.de>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class userlist_table extends \table_sql {
+class userlist_table extends \core_table\sql_table {
 
     /**
      * Override the constructor to construct a userlist table instead of a simple table.
