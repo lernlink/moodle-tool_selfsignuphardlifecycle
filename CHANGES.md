@@ -4,6 +4,10 @@ moodle-tool_selfsignuphardlifecycle
 Changes
 -------
 
+### Unreleased
+
+* 2025-03-17 - Prepare compatibility for Moodle 4.5.
+
 ### v4.4-r2
 
 * 2025-03-18 - Bugfix: "Enable user suspension before deletion" feature was partly broken, resolves #2.
