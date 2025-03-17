@@ -6,6 +6,7 @@ Changes
 
 ### Unreleased
 
+* 2025-03-17 - Upgrade: Make the scheduled task non-blocking as this has been deprecated in Moodle core.
 * 2025-03-17 - Prepare compatibility for Moodle 4.4.
 
 ### v4.3-r3
