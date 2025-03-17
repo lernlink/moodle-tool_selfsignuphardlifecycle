@@ -631,8 +631,14 @@ function tool_selfsignuphardlifecycle_get_user_overrides($userid) {
         return ['deletion' => false, 'suspension' => false];
     }
 
-    // Use a static array to cache the results of this function as it might be called multiple times per user.
-    static $staticcache = [];
+    // If Behat is running currently.
+    if (defined('BEHAT_SITE_RUNNING') && BEHAT_SITE_RUNNING) {
+        // Initialize a non-static empty array.
+        $staticcache = [];
+    } else {
+        // Use a static array to cache the results of this function as it might be called multiple times per user.
+        static $staticcache = [];
+    }
 
     // If we did not compose the overrides for the given user yet.
     if (isset($staticcache[$userid]) == false) {
@@ -681,8 +687,14 @@ function tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() {
     // Get plugin config.
     $config = get_config('tool_selfsignuphardlifecycle');
 
-    // Use a static variable to cache the result of this function as it might be called multiple times per page call.
-    static $enabledandconfigured;
+    // If Behat is running currently.
+    if (defined('BEHAT_SITE_RUNNING') && BEHAT_SITE_RUNNING) {
+        // Initialize a non-static empty array.
+        $enabledandconfigured = null;
+    } else {
+        // Use a static variable to cache the result of this function as it might be called multiple times per page call.
+        static $enabledandconfigured = null;
+    }
 
     // If we did not check the status yet.
     if (is_bool($enabledandconfigured) == false) {
