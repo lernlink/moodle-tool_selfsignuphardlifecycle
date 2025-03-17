@@ -4,7 +4,7 @@ moodle-tool_selfsignuphardlifecycle
 Changes
 -------
 
-### Unreleased
+### v4.4-r1
 
 * 2025-03-17 - Bugfix: Behat Scenario 'If user overrides is enabled, user suspension and deletion days can be overridden' always failed on first try, resolves #1.
 * 2025-03-17 - Upgrade: Fix Behat tests which broke on 4.4.
