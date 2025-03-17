@@ -69,9 +69,9 @@ class user_suspended extends \core\event\base {
     /**
      * Returns relevant URL.
      *
-     * @return \moodle_url
+     * @return \core\url
      */
     public function get_url() {
-        return new \moodle_url('/user/view.php', ['id' => $this->relateduserid]);
+        return new \core\url('/user/view.php', ['id' => $this->relateduserid]);
     }
 }

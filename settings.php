@@ -130,7 +130,7 @@ if ($hassiteconfig) {
         // If there aren't any custom user profile fields.
         if (count($userprofilefieldoptions) < 1) {
             // Build settings page link.
-            $url = new moodle_url('/user/profile/index.php');
+            $url = new \core\url('/user/profile/index.php');
             $link = ['url' => $url->out(),
                     'linktitle' => get_string('profilefields', 'admin', null, true),
                     'fieldname' => get_string('pluginname', 'profilefield_datetime', null, true)];
@@ -206,7 +206,7 @@ if ($hassiteconfig) {
         // If there aren't any cohorts yet.
         if (count($cohortoptions) < 1) {
             // Build settings page link.
-            $url = new moodle_url('/cohort/index.php');
+            $url = new \core\url('/cohort/index.php');
             $link = ['url' => $url->out(), 'linktitle' => get_string('cohorts', 'core_cohort', null, true)];
 
             // Create empty cohort exceptions field widget to trigger a settings entry in the database.
@@ -240,7 +240,7 @@ if ($hassiteconfig) {
     // Create new external userlist page.
     $page = new admin_externalpage('tool_selfsignuphardlifecycle_userlist',
             get_string('settingsuserlist', 'tool_selfsignuphardlifecycle', null, true),
-            new moodle_url('/admin/tool/selfsignuphardlifecycle/settings_userlist.php'));
+            new \core\url('/admin/tool/selfsignuphardlifecycle/settings_userlist.php'));
 
     // Add pagelist page to navigation category.
     $ADMIN->add('tool_selfsignuphardlifecycle', $page);

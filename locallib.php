@@ -484,14 +484,14 @@ function tool_selfsignuphardlifecycle_userlist_get_nextstep_string($userid, $sus
 function tool_selfsignuphardlifecycle_userlist_get_profile_string($userid) {
 
     // First line: View profile.
-    $viewurl = new moodle_url('/user/profile.php', ['id' => $userid]);
+    $viewurl = new \core\url('/user/profile.php', ['id' => $userid]);
     $string = html_writer::link($viewurl, get_string('profileview', 'tool_selfsignuphardlifecycle'));
 
     // Separator.
     $string .= '&nbsp;&nbsp;|&nbsp;&nbsp;';
 
     // Second line: Edit profile.
-    $editurl = new moodle_url('/user/editadvanced.php', ['id' => $userid]);
+    $editurl = new \core\url('/user/editadvanced.php', ['id' => $userid]);
     $string .= html_writer::link($editurl, get_string('profileedit', 'tool_selfsignuphardlifecycle'));
 
     return $string;
