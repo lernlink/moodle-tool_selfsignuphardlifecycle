@@ -19,12 +19,12 @@ Feature: The hard life cycle for self-signup users tool allows admins to get rid
     And I navigate to "Users > Hard life cycle for self-signup users > User list" in site administration
     Then I should not see "user1" in the "#region-main" "css_element"
     And I navigate to "Users > Accounts > Browse list of users" in site administration
-    Then I should see "User 1" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should not exist in the "User 1" "table_row"
+    Then I should see "User 1" in the "Users" "table"
+    And I should not see "Suspended" in the "User 1" "table_row"
     And I run the scheduled task "tool_selfsignuphardlifecycle\task\process_lifecycle"
     And I reload the page
-    Then I should see "User 1" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should not exist in the "User 1" "table_row"
+    Then I should see "User 1" in the "Users" "table"
+    And I should not see "Suspended" in the "User 1" "table_row"
 
   Scenario: If user suspension is not enabled, self-signup users are deleted after the user deletion period
     Given the following "users" exist:
@@ -51,9 +51,9 @@ Feature: The hard life cycle for self-signup users tool allows admins to get rid
     And I should see "Will be deleted" in the "user2" "table_row"
     And I should not see "user3" in the "#region-main" "css_element"
     And I navigate to "Users > Accounts > Browse list of users" in site administration
-    Then I should see "User 1" in the "#users" "css_element"
-    And I should see "User 2" in the "#users" "css_element"
-    And I should not see "User 3" in the "#users" "css_element"
+    Then I should see "User 1" in the "Users" "table"
+    And I should see "User 2" in the "Users" "table"
+    And I should not see "User 3" in the "Users" "table"
 
   Scenario: If user suspension is enabled, self-signup users are suspended after the user suspension period and then deleted after the user deletion period
     Given the following config values are set as admin:
@@ -105,18 +105,18 @@ Feature: The hard life cycle for self-signup users tool allows admins to get rid
     And I should see "Suspended" in the "user6" "table_row"
     And I should see "Will be deleted" in the "user6" "table_row"
     And I navigate to "Users > Accounts > Browse list of users" in site administration
-    Then I should see "User 1" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should not exist in the "User 1" "table_row"
-    And I should see "User 2" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should not exist in the "User 2" "table_row"
-    And I should see "User 3" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should exist in the "User 3" "table_row"
-    And I should see "User 4" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should exist in the "User 4" "table_row"
-    And I should see "User 5" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should exist in the "User 5" "table_row"
-    And I should see "User 6" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should exist in the "User 6" "table_row"
+    Then I should see "User 1" in the "Users" "table"
+    And I should not see "Suspended" in the "User 1" "table_row"
+    And I should see "User 2" in the "Users" "table"
+    And I should not see "Suspended" in the "User 2" "table_row"
+    And I should see "User 3" in the "Users" "table"
+    And I should see "Suspended" in the "User 3" "table_row"
+    And I should see "User 4" in the "Users" "table"
+    And I should see "Suspended" in the "User 4" "table_row"
+    And I should see "User 5" in the "Users" "table"
+    And I should see "Suspended" in the "User 5" "table_row"
+    And I should see "User 6" in the "Users" "table"
+    And I should see "Suspended" in the "User 6" "table_row"
     And I run the scheduled task "tool_selfsignuphardlifecycle\task\process_lifecycle"
     And I navigate to "Users > Hard life cycle for self-signup users > User list" in site administration
     Then I should see "Active" in the "user1" "table_row"
@@ -131,17 +131,17 @@ Feature: The hard life cycle for self-signup users tool allows admins to get rid
     And I should see "Will be deleted" in the "user5" "table_row"
     And I should not see "user6" in the "#region-main" "css_element"
     And I navigate to "Users > Accounts > Browse list of users" in site administration
-    Then I should see "User 1" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should not exist in the "User 1" "table_row"
-    And I should see "User 2" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should not exist in the "User 2" "table_row"
-    And I should see "User 3" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should exist in the "User 3" "table_row"
-    And I should see "User 4" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should exist in the "User 4" "table_row"
-    And I should see "User 5" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should exist in the "User 5" "table_row"
-    And I should not see "User 6" in the "#users" "css_element"
+    Then I should see "User 1" in the "Users" "table"
+    And I should not see "Suspended" in the "User 1" "table_row"
+    And I should see "User 2" in the "Users" "table"
+    And I should not see "Suspended" in the "User 2" "table_row"
+    And I should see "User 3" in the "Users" "table"
+    And I should see "Suspended" in the "User 3" "table_row"
+    And I should see "User 4" in the "Users" "table"
+    And I should see "Suspended" in the "User 4" "table_row"
+    And I should see "User 5" in the "Users" "table"
+    And I should see "Suspended" in the "User 5" "table_row"
+    And I should not see "User 6" in the "Users" "table"
 
   @javascript
   Scenario: If user overrides is enabled, user suspension and deletion days can be overridden
@@ -246,13 +246,13 @@ Feature: The hard life cycle for self-signup users tool allows admins to get rid
     And I should see "Suspended" in the "user4" "table_row"
     And I should see "Will be deleted" in the "user4" "table_row"
     And I navigate to "Users > Accounts > Browse list of users" in site administration
-    Then I should see "User 1" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should exist in the "User 1" "table_row"
-    And I should see "User 2" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should not exist in the "User 2" "table_row"
-    And I should not see "User 3" in the "#users" "css_element"
-    And I should see "User 4" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should exist in the "User 4" "table_row"
+    Then I should see "User 1" in the "Users" "table"
+    And I should see "Suspended" in the "User 1" "table_row"
+    And I should see "User 2" in the "Users" "table"
+    And I should not see "Suspended" in the "User 2" "table_row"
+    And I should not see "User 3" in the "Users" "table"
+    And I should see "User 4" in the "Users" "table"
+    And I should see "Suspended" in the "User 4" "table_row"
 
   @javascript
   Scenario: Users from ignored cohorts remain untouched by the tool
@@ -288,15 +288,15 @@ Feature: The hard life cycle for self-signup users tool allows admins to get rid
     And I should see "user2" in the "#region-main" "css_element"
 
     And I navigate to "Users > Accounts > Browse list of users" in site administration
-    Then I should see "User 1" in the "#users" "css_element"
-    And I should see "User 2" in the "#users" "css_element"
-    And I should see "User 3" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should not exist in the "User 1" "table_row"
-    And ".usersuspended" "css_element" should not exist in the "User 2" "table_row"
-    And ".usersuspended" "css_element" should not exist in the "User 3" "table_row"
+    Then I should see "User 1" in the "Users" "table"
+    And I should see "User 2" in the "Users" "table"
+    And I should see "User 3" in the "Users" "table"
+    And I should not see "Suspended" in the "User 1" "table_row"
+    And I should not see "Suspended" in the "User 2" "table_row"
+    And I should not see "Suspended" in the "User 3" "table_row"
     And I run the scheduled task "tool_selfsignuphardlifecycle\task\process_lifecycle"
     And I reload the page
-    Then I should see "User 1" in the "#users" "css_element"
-    And I should not see "User 2" in the "#users" "css_element"
-    And I should not see "User 3" in the "#users" "css_element"
-    And ".usersuspended" "css_element" should not exist in the "User 1" "table_row"
+    Then I should see "User 1" in the "Users" "table"
+    And I should not see "User 2" in the "Users" "table"
+    And I should not see "User 3" in the "Users" "table"
+    And I should not see "Suspended" in the "User 1" "table_row"
