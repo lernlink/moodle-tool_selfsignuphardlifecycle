@@ -68,6 +68,25 @@ Here, you can optionally configure cohorts which should be ignored by the tool.
 On this page, there is a list which shows all users which are covered by this tool according to the current configuration. You will also see the current status of each user and when the next step of the user's hard lifecycle will happen.
 
 
+Capabilities
+------------
+
+This plugin does not add any additional capabilities.
+
+
+Scheduled Tasks
+---------------
+
+This plugin also introduces these additional scheduled tasks:
+
+This plugin also introduces these additional scheduled tasks:
+
+### \tool_selfsignuphardlifecycle\task\process_lifecycle
+
+This is the main scheduled task which carries out all the lifecycle processes of this plugin.\
+By default, the task is enabled and runs every night at one minute after midnight.
+
+
 Theme support
 -------------
 
