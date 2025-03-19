@@ -4,7 +4,7 @@ moodle-tool_selfsignuphardlifecycle
 Changes
 -------
 
-### Unreleased
+### v4.1-r4
 
 * 2025-03-18 - Bugfix: "Enable user suspension before deletion" feature was partly broken, resolves #2.
 * 2025-03-17 - Bugfix: Behat Scenario 'If user overrides is enabled, user suspension and deletion days can be overridden' always failed on first try, resolves #1.
