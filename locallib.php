@@ -92,7 +92,7 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
             }
 
             // If the user suspension is enabled but the user is not yet suspended.
-            if (isset($config->enablesuspension) && $config->enablesuspension == true && $user->suspended == false) {
+            if (isset($config->enableusersuspension) && $config->enableusersuspension == true && $user->suspended == false) {
                 // If the user should be suspended according to his override date.
                 if ($user->suspensionoverride != false && $user->suspensionoverride < time()) {
                     // Trace.
@@ -179,12 +179,12 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
     $userdeletiondatets = tool_selfsignuphardlifecycle_calculate_reference_day($config->userdeletionperiod);
 
     // If the user suspension is enabled, calculate the reference date for the user suspension.
-    if (isset($config->enablesuspension) && $config->enablesuspension == true) {
+    if (isset($config->enableusersuspension) && $config->enableusersuspension == true) {
         $usersuspensiondatets = tool_selfsignuphardlifecycle_calculate_reference_day($config->usersuspensionperiod);
     }
 
     // If the user suspension is enabled.
-    if (isset($config->enablesuspension) && $config->enablesuspension == true) {
+    if (isset($config->enableusersuspension) && $config->enableusersuspension == true) {
         // Prepare the suspended SQL snippet as WHERE clause argument.
         $suspendedsqlsnippet = 'AND suspended = :suspended';
 
@@ -264,7 +264,7 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
     $deleteusersrs->close();
 
     // If the user suspension is enabled.
-    if (isset($config->enablesuspension) && $config->enablesuspension == true) {
+    if (isset($config->enableusersuspension) && $config->enableusersuspension == true) {
         // Get all self-signup users who are older than the reference date and who are not suspended and not already deleted.
         // The users are fetched as recordset as the number could be really high.
         $suspendusersparams = $authsqlparams;
@@ -438,7 +438,7 @@ function tool_selfsignuphardlifecycle_userlist_get_nextstep_string($userid, $sus
     } else if ($suspended == 0) {
 
         // If the user suspension is enabled.
-        if (isset($config->enablesuspension) && $config->enablesuspension == true) {
+        if (isset($config->enableusersuspension) && $config->enableusersuspension == true) {
             // If the user suspension is overridden.
             if (tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() == true &&
                     $useroverrides['suspension'] != false) {
