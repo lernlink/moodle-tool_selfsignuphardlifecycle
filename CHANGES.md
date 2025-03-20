@@ -4,7 +4,7 @@ moodle-tool_selfsignuphardlifecycle
 Changes
 -------
 
-### Unreleased
+### v4.5-r1
 
 * 2025-03-20 - Development: Rename master branch to main, please update your clones.
 * 2025-03-17 - Upgrade: Adopt changes from MDL-82183 and use new \core_table\sql_table.
