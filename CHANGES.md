@@ -6,6 +6,7 @@ Changes
 
 ### Unreleased
 
+* 2025-03-20 - Development: Rename master branch to main, please update your clones.
 * 2025-03-17 - Upgrade: Adopt changes from MDL-82183 and use new \core_table\sql_table.
 * 2025-03-17 - Upgrade: Adopt changes from MDL-82183 and use new \core\output\html_writer.
 * 2025-03-17 - Upgrade: Adopt changes from MDL-81960 and use new \core\url class.
