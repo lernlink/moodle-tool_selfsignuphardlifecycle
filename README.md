@@ -1,7 +1,7 @@
 moodle-tool_selfsignuphardlifecycle
 ===================================
 
-[![Moodle Plugin CI](https://github.com/lernlink/moodle-tool_selfsignuphardlifecycle/workflows/Moodle%20Plugin%20CI/badge.svg?branch=MOODLE_401_STABLE)](https://github.com/lernlink/moodle-tool_selfsignuphardlifecycle/actions?query=workflow%3A%22Moodle+Plugin+CI%22+branch%3AMOODLE_401_STABLE)
+[![Moodle Plugin CI](https://github.com/lernlink/moodle-tool_selfsignuphardlifecycle/actions/workflows/moodle-plugin-ci.yml/badge.svg?branch=MOODLE_401_STABLE)](https://github.com/lernlink/moodle-tool_selfsignuphardlifecycle/actions?query=workflow%3A%22Moodle+Plugin+CI%22+branch%3AMOODLE_401_STABLE)
 
 Moodle admin tool to suspend and delete users based on their account creation date.
 
