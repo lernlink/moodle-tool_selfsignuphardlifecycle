@@ -31,13 +31,13 @@ require(__DIR__ . '/../../../config.php');
 global $CFG, $PAGE, $OUTPUT;
 
 // Include adminlib.php.
-require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir . '/adminlib.php');
 
 // Include tablelib.php.
-require_once($CFG->libdir.'/tablelib.php');
+require_once($CFG->libdir . '/tablelib.php');
 
 // Include locallib.php.
-require_once($CFG->dirroot.'/admin/tool/selfsignuphardlifecycle/locallib.php');
+require_once($CFG->dirroot . '/admin/tool/selfsignuphardlifecycle/locallib.php');
 
 // Set up external admin page.
 admin_externalpage_setup('tool_selfsignuphardlifecycle_userlist');
@@ -54,7 +54,7 @@ echo $OUTPUT->heading($title);
 
 // Prepare table.
 $table = new userlist_table('selfsignuphardlifecycle_userlist');
-$table->define_baseurl($CFG->wwwroot.'/admin/tool/selfsignuphardlifecycle/settings_userlist.php');
+$table->define_baseurl($CFG->wwwroot . '/admin/tool/selfsignuphardlifecycle/settings_userlist.php');
 
 // Output table.
 $table->out(50, true);

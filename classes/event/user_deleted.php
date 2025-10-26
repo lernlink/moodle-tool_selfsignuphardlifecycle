@@ -32,7 +32,6 @@ namespace tool_selfsignuphardlifecycle\event;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class user_deleted extends \core\event\base {
-
     /**
      * Init method.
      */
@@ -58,8 +57,11 @@ class user_deleted extends \core\event\base {
      */
     public function get_description() {
         if (isset($this->other['overridden']) && $this->other['overridden'] == true) {
-            return get_string('eventuserdeletedoverridden_desc', 'tool_selfsignuphardlifecycle',
-                    ['userid' => $this->relateduserid]);
+            return get_string(
+                'eventuserdeletedoverridden_desc',
+                'tool_selfsignuphardlifecycle',
+                ['userid' => $this->relateduserid]
+            );
         } else {
             return get_string('eventuserdeleted_desc', 'tool_selfsignuphardlifecycle', ['userid' => $this->relateduserid,
                     'period' => $this->other['period']]);
