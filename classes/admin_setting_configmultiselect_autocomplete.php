@@ -57,7 +57,7 @@ class admin_setting_configmultiselect_autocomplete extends \admin_setting_config
      * @param string $query
      * @return string XHTML field and wrapping div
      */
-    public function output_html($data, $query='') {
+    public function output_html($data, $query = '') {
         global $PAGE;
 
         $html = parent::output_html($data, $query);

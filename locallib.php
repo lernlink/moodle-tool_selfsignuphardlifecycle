@@ -41,7 +41,7 @@ define('TOOL_SELFSIGNUPHARDLIFECYCLLE_ENABLECOHORTEXCEPTIONS_DEFAULT', 0);
 function tool_selfsignuphardlifecycle_process_lifecycle() {
     global $CFG, $DB;
 
-    require_once($CFG->dirroot.'/user/lib.php');
+    require_once($CFG->dirroot . '/user/lib.php');
 
     // Initialize return value.
     $retvalue = true;
@@ -50,10 +50,10 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
     $config = get_config('tool_selfsignuphardlifecycle');
 
     // Get SQL snippets for covered auth methods.
-    list($authinsql, $authsqlparams) = tool_selfsignuphardlifecycle_get_auth_sql();
+    [$authinsql, $authsqlparams] = tool_selfsignuphardlifecycle_get_auth_sql();
 
     // Get SQL subquery for ignoring cohorts.
-    list($cohortexceptionswhere, $cohortexceptionsparams) =
+    [$cohortexceptionswhere, $cohortexceptionsparams] =
             tool_selfsignuphardlifecycle_get_cohort_exceptions_sql();
 
     // PHASE 1: Overridden users.
@@ -79,7 +79,7 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
                             AND uid.fieldid = :suspensionoverridefieldid
                            ) AS suspensionoverride
                        FROM {user} u
-                       WHERE u.auth '.$authinsql.' '.$cohortexceptionswhere.'
+                       WHERE u.auth ' . $authinsql . ' ' . $cohortexceptionswhere . '
                        AND u.deleted = :deleted
                        ORDER BY u.id ASC';
         $usersrs = $DB->get_recordset_sql($userssql, $usersparams);
@@ -96,7 +96,7 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
                 // If the user should be suspended according to his override date.
                 if ($user->suspensionoverride != false && $user->suspensionoverride < time()) {
                     // Trace.
-                    mtrace('Suspending user '.fullname($user).' with ID '.$user->id . ' (Suspension period overridden)...');
+                    mtrace('Suspending user ' . fullname($user) . ' with ID ' . $user->id . ' (Suspension period overridden)...');
 
                     // Suspend the user.
                     $user->suspended = 1;
@@ -138,7 +138,7 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
                 // If the user should be deleted according to his override date.
                 if ($user->deletionoverride != false && $user->deletionoverride < time()) {
                     // Trace.
-                    mtrace('Deleting user '.fullname($user).' with ID '.$user->id.' (Deletion period overridden)...');
+                    mtrace('Deleting user ' . fullname($user) . ' with ID ' . $user->id . ' (Deletion period overridden)...');
 
                     // Delete the user.
                     $ret = delete_user($user);
@@ -203,10 +203,10 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
     $deleteusersparams = array_merge($deleteusersparams, $cohortexceptionsparams);
     $deleteuserssql = 'SELECT u.*
                        FROM {user} u
-                       WHERE u.auth '.$authinsql.'
-                       AND u.timecreated < :timecreated '.
-                       $suspendedsqlsnippet.' '.
-                       $cohortexceptionswhere.'
+                       WHERE u.auth ' . $authinsql . '
+                       AND u.timecreated < :timecreated ' .
+                       $suspendedsqlsnippet . ' ' .
+                       $cohortexceptionswhere . '
                        AND u.deleted = :deleted
                        ORDER BY u.id ASC';
     $deleteusersrs = $DB->get_recordset_sql($deleteuserssql, $deleteusersparams);
@@ -228,7 +228,7 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
         }
 
         // Trace.
-        mtrace('Deleting user '.fullname($user).' with ID '.$user->id.'...');
+        mtrace('Deleting user ' . fullname($user) . ' with ID ' . $user->id . '...');
 
         // Delete the user.
         $ret = delete_user($user);
@@ -275,8 +275,8 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
         $suspenduserssql = 'SELECT u.*
                        FROM {user} u
                        WHERE u.auth ' . $authinsql . '
-                       AND u.timecreated < :timecreated '.
-                       $cohortexceptionswhere.'
+                       AND u.timecreated < :timecreated ' .
+                       $cohortexceptionswhere . '
                        AND u.suspended = :suspended
                        AND u.deleted = :deleted
                        ORDER BY u.id ASC';
@@ -422,8 +422,10 @@ function tool_selfsignuphardlifecycle_userlist_get_nextstep_string($userid, $sus
     // If the user is suspended.
     if ($suspended == 1) {
         // If the user deletion is overridden.
-        if (tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() == true &&
-                $useroverrides['deletion'] != false) {
+        if (
+            tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() == true &&
+                $useroverrides['deletion'] != false
+        ) {
             $date = \core_date::strftime(get_string('strftimedaydate'), (int) $useroverrides['deletion']);
 
             // Otherwise.
@@ -436,12 +438,13 @@ function tool_selfsignuphardlifecycle_userlist_get_nextstep_string($userid, $sus
 
         // If the user is not suspended.
     } else if ($suspended == 0) {
-
         // If the user suspension is enabled.
         if (isset($config->enableusersuspension) && $config->enableusersuspension == true) {
             // If the user suspension is overridden.
-            if (tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() == true &&
-                    $useroverrides['suspension'] != false) {
+            if (
+                tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() == true &&
+                    $useroverrides['suspension'] != false
+            ) {
                 $date = \core_date::strftime(get_string('strftimedaydate'), (int) $useroverrides['suspension']);
 
                 // Otherwise.
@@ -455,8 +458,10 @@ function tool_selfsignuphardlifecycle_userlist_get_nextstep_string($userid, $sus
             // Otherwise.
         } else {
             // If the user deletion is overridden.
-            if (tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() == true &&
-                    $useroverrides['deletion'] != false) {
+            if (
+                tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() == true &&
+                    $useroverrides['deletion'] != false
+            ) {
                 $date = \core_date::strftime(get_string('strftimedaydate'), (int) $useroverrides['deletion']);
 
                 // Otherwise.
@@ -508,10 +513,10 @@ function tool_selfsignuphardlifecycle_userlist_get_profile_string($userid) {
 function tool_selfsignuphardlifecycle_userlist_calculate_nextstep_date($timecreated, $period) {
 
     // Get the date when the account was created.
-    $date = new \DateTime('@'.$timecreated, \core_date::get_server_timezone_object());
+    $date = new \DateTime('@' . $timecreated, \core_date::get_server_timezone_object());
 
     // Advance the date by the configured delay and add one more day (as the registration day is not counted).
-    $date->modify('+ '.($period + 1).' days');
+    $date->modify('+ ' . ($period + 1) . ' days');
 
     // Compose and return string representation.
     return \core_date::strftime(get_string('strftimedaydate'), (int) $date->getTimestamp());
@@ -527,7 +532,7 @@ function tool_selfsignuphardlifecycle_userlist_calculate_nextstep_date($timecrea
 function tool_selfsignuphardlifecycle_calculate_reference_day($period) {
 
     // Get the reference day.
-    $referencedate = new \DateTime($period.' days ago 00:00', \core_date::get_server_timezone_object());
+    $referencedate = new \DateTime($period . ' days ago 00:00', \core_date::get_server_timezone_object());
 
     // Get the timestamp of the reference day.
     $referencedatets = $referencedate->getTimestamp();
@@ -650,16 +655,20 @@ function tool_selfsignuphardlifecycle_get_user_overrides($userid) {
         $overrides = [];
 
         // Add the user's deletion override value.
-        if (isset($profilefielddata[$config->userdeletionoverridefield]) &&
-                $profilefielddata[$config->userdeletionoverridefield] != 0) {
+        if (
+            isset($profilefielddata[$config->userdeletionoverridefield]) &&
+                $profilefielddata[$config->userdeletionoverridefield] != 0
+        ) {
             $overrides['deletion'] = $profilefielddata[$config->userdeletionoverridefield];
         } else {
             $overrides['deletion'] = false;
         }
 
         // Add the user's suspension override value.
-        if (isset($profilefielddata[$config->usersuspensionoverridefield]) &&
-                $profilefielddata[$config->usersuspensionoverridefield] != 0) {
+        if (
+            isset($profilefielddata[$config->usersuspensionoverridefield]) &&
+                $profilefielddata[$config->usersuspensionoverridefield] != 0
+        ) {
             $overrides['suspension'] = $profilefielddata[$config->usersuspensionoverridefield];
         } else {
             $overrides['suspension'] = false;
@@ -699,13 +708,15 @@ function tool_selfsignuphardlifecycle_user_overrides_enabled_and_configured() {
     // If we did not check the status yet.
     if (is_bool($enabledandconfigured) == false) {
         // If everything is configured properly.
-        if (isset($config->enableuseroverrides) && $config->enableuseroverrides == true &&
+        if (
+            isset($config->enableuseroverrides) && $config->enableuseroverrides == true &&
                 (isset($config->userdeletionoverridefield) &&
                         filter_var($config->userdeletionoverridefield, FILTER_VALIDATE_INT) &&
                         $config->userdeletionoverridefield > 0) ||
                 (isset($config->usersuspensionoverridefield) &&
                         filter_var($config->usersuspensionoverridefield, FILTER_VALIDATE_INT) &&
-                        $config->usersuspensionoverridefield > 0)) {
+                        $config->usersuspensionoverridefield > 0)
+        ) {
             $retvalue = true;
 
             // Otherwise.
@@ -758,12 +769,12 @@ function tool_selfsignuphardlifecycle_get_cohort_exceptions_sql() {
         }
 
         // Compose the WHERE subquery.
-        list($whereinsql, $whereinparams) = $DB->get_in_or_equal($cohorts, SQL_PARAMS_NAMED, 'cohort', true);
+        [$whereinsql, $whereinparams] = $DB->get_in_or_equal($cohorts, SQL_PARAMS_NAMED, 'cohort', true);
         $where = 'AND NOT EXISTS (
                 SELECT 1
                 FROM {cohort_members}
                 WHERE {cohort_members}.userid = u.id
-                AND {cohort_members}.cohortid '.$whereinsql.'
+                AND {cohort_members}.cohortid ' . $whereinsql . '
             )';
 
         // Compose the cohort exceptions array.

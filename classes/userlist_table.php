@@ -27,7 +27,7 @@ namespace tool_selfsignuphardlifecycle;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot.'/lib/tablelib.php');
+require_once($CFG->dirroot . '/lib/tablelib.php');
 
 /**
  * Class userlist_table
@@ -37,7 +37,6 @@ require_once($CFG->dirroot.'/lib/tablelib.php');
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class userlist_table extends \core_table\sql_table {
-
     /**
      * Override the constructor to construct a userlist table instead of a simple table.
      *
@@ -50,13 +49,13 @@ class userlist_table extends \core_table\sql_table {
         $this->is_downloadable(false);
 
         // Get SQL snippets for covered auth methods.
-        list($authinsql, $authsqlparams) = tool_selfsignuphardlifecycle_get_auth_sql();
+        [$authinsql, $authsqlparams] = tool_selfsignuphardlifecycle_get_auth_sql();
 
         // Get SQL snippets for excludings admins and guests.
-        list($admininsql, $adminsqlparams) = tool_selfsignuphardlifecycle_get_adminandguest_sql();
+        [$admininsql, $adminsqlparams] = tool_selfsignuphardlifecycle_get_adminandguest_sql();
 
         // Get SQL subquery for ignoring cohorts.
-        list($cohortexceptionswhere, $cohortexceptionsparams) =
+        [$cohortexceptionswhere, $cohortexceptionsparams] =
                 tool_selfsignuphardlifecycle_get_cohort_exceptions_sql();
 
         // Get plugin config.
@@ -65,7 +64,7 @@ class userlist_table extends \core_table\sql_table {
         // Set the sql for the table.
         $sqlfields = 'u.id, u.firstname, u.lastname, u.username, u.email, u.auth, u.suspended, u.timecreated';
         $sqlfrom = '{user} u';
-        $sqlwhere = 'u.deleted = :deleted AND u.auth '.$authinsql.' AND u.id '.$admininsql.' '.$cohortexceptionswhere;
+        $sqlwhere = 'u.deleted = :deleted AND u.auth ' . $authinsql . ' AND u.id ' . $admininsql . ' ' . $cohortexceptionswhere;
         $sqlparams = array_merge($authsqlparams, $adminsqlparams, $cohortexceptionsparams);
         $sqlparams['deleted'] = 0;
         $this->set_sql($sqlfields, $sqlfrom, $sqlwhere, $sqlparams);
@@ -145,8 +144,11 @@ class userlist_table extends \core_table\sql_table {
 
         // Inject next step column.
         if ($column === 'nextstep') {
-            return tool_selfsignuphardlifecycle_userlist_get_nextstep_string($row->id, $row->suspended,
-                    $row->timecreated);
+            return tool_selfsignuphardlifecycle_userlist_get_nextstep_string(
+                $row->id,
+                $row->suspended,
+                $row->timecreated
+            );
         }
 
         // Inject profile column.
