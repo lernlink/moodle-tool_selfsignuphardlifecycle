@@ -67,17 +67,33 @@ function tool_selfsignuphardlifecycle_process_lifecycle() {
         $usersparams['deletionoverridefieldid'] = $config->userdeletionoverridefield;
         $usersparams['suspensionoverridefieldid'] = $config->usersuspensionoverridefield;
         $usersparams = array_merge($usersparams, $cohortexceptionsparams);
+        $subselectdeletion = 'SELECT uid.data
+                            FROM {user_info_data} uid
+                            WHERE uid.userid = u.id
+                            AND uid.fieldid = :deletionoverridefieldid';
+        $subselectsuspension = 'SELECT uid.data
+                            FROM {user_info_data} uid
+                            WHERE uid.userid = u.id
+                            AND uid.fieldid = :suspensionoverridefieldid';
+        // If no deletion override field is set, use a dummy that always returns false.
+        if (
+            !isset($config->userdeletionoverridefield) ||
+                filter_var($config->userdeletionoverridefield, FILTER_VALIDATE_INT) === false ||
+                $config->userdeletionoverridefield < 1
+        ) {
+            $subselectdeletion = 'SELECT 0';
+        }
+        // If no suspension override field is set, use a dummy that always returns false.
+        if (
+            !isset($config->usersuspensionoverridefield) ||
+                filter_var($config->usersuspensionoverridefield, FILTER_VALIDATE_INT) === false ||
+                $config->usersuspensionoverridefield < 1
+        ) {
+            $subselectsuspension = 'SELECT 0';
+        }
         $userssql = 'SELECT u.*,
-                           (SELECT uid.data
-                            FROM {user_info_data} uid
-                            WHERE uid.userid = u.id
-                            AND uid.fieldid = :deletionoverridefieldid
-                           ) AS deletionoverride,
-                           (SELECT uid.data
-                            FROM {user_info_data} uid
-                            WHERE uid.userid = u.id
-                            AND uid.fieldid = :suspensionoverridefieldid
-                           ) AS suspensionoverride
+                           (' . $subselectdeletion . ') AS deletionoverride,
+                           (' . $subselectsuspension . ') AS suspensionoverride
                        FROM {user} u
                        WHERE u.auth ' . $authinsql . ' ' . $cohortexceptionswhere . '
                        AND u.deleted = :deleted
