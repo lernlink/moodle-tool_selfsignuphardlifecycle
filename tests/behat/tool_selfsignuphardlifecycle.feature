@@ -257,6 +257,104 @@ Feature: The hard life cycle for self-signup users tool allows admins to get rid
     And I should see "Suspended" in the "User 4" "table_row"
 
   @javascript
+  Scenario: If user overrides is enabled with only deletion override field configured, the scheduled task still works correctly
+    Given the following config values are set as admin:
+      | enableusersuspension | 1   | tool_selfsignuphardlifecycle |
+      | usersuspensionperiod | 100 | tool_selfsignuphardlifecycle |
+      | enableuseroverrides  | 1   | tool_selfsignuphardlifecycle |
+    And the following "users" exist:
+      | username | firstname | lastname | email             | auth  | suspended | timecreated        |
+      # User 1 will be suspended normally as no suspension override is configured
+      | user1    | User      | 1        | user1@example.com | email | 0         | ## 101 days ago ## |
+      # User 2 would be deleted normally but deletion will be overridden
+      | user2    | User      | 2        | user2@example.com | email | 1         | ## 201 days ago ## |
+    And I log in as "admin"
+    And I navigate to "Users > Accounts > User profile fields" in site administration
+    And I click on "Create a new profile field" "link"
+    And I click on "Date/Time" "link"
+    And I set the following fields to these values:
+      | Short name (must be unique)   | deletionoverride |
+      | Name                          | Deletion day     |
+      | Start year                    | 2020             |
+      | End year                      | 2050             |
+      | Include time?                 | 0                |
+    And I click on "Save changes" "button"
+    And I navigate to "Users > Hard life cycle for self-signup users > Settings" in site administration
+    And I set the field "User deletion override profile field" to "Deletion day"
+    # Leave suspension override field empty
+    And I click on "Save changes" "button"
+
+    And I navigate to "Users > Hard life cycle for self-signup users > User list" in site administration
+    And I click on "Edit" "link" in the "user2" "table_row"
+    And I expand all fieldsets
+    And I set the field "profile_field_deletionoverride[enabled]" to "1"
+    And I set the field "profile_field_deletionoverride[day]" to "1"
+    And I set the field "profile_field_deletionoverride[month]" to "1"
+    And I set the field "profile_field_deletionoverride[year]" to "2050"
+    And I click on "Update profile" "button"
+
+    And I navigate to "Users > Hard life cycle for self-signup users > User list" in site administration
+    And I run the scheduled task "tool_selfsignuphardlifecycle\task\process_lifecycle"
+    And I reload the page
+    Then I should see "Suspended" in the "user1" "table_row"
+    And I should see "Will be deleted" in the "user1" "table_row"
+    And I should see "Suspended" in the "user2" "table_row"
+    And I should see "Will be deleted" in the "user2" "table_row"
+    And I navigate to "Users > Accounts > Browse list of users" in site administration
+    Then I should see "User 1" in the "Users" "table"
+    And I should see "Suspended" in the "User 1" "table_row"
+    And I should see "User 2" in the "Users" "table"
+    And I should see "Suspended" in the "User 2" "table_row"
+
+  @javascript
+  Scenario: If user overrides is enabled with only suspension override field configured, the scheduled task still works correctly
+    Given the following config values are set as admin:
+      | enableusersuspension | 1   | tool_selfsignuphardlifecycle |
+      | usersuspensionperiod | 100 | tool_selfsignuphardlifecycle |
+      | enableuseroverrides  | 1   | tool_selfsignuphardlifecycle |
+    And the following "users" exist:
+      | username | firstname | lastname | email             | auth  | suspended | timecreated        |
+      # User 1 would be suspended normally but suspension will be overridden
+      | user1    | User      | 1        | user1@example.com | email | 0         | ## 101 days ago ## |
+      # User 2 will be deleted normally as no deletion override is configured
+      | user2    | User      | 2        | user2@example.com | email | 1         | ## 201 days ago ## |
+    And I log in as "admin"
+    And I navigate to "Users > Accounts > User profile fields" in site administration
+    And I click on "Create a new profile field" "link"
+    And I click on "Date/Time" "link"
+    And I set the following fields to these values:
+      | Short name (must be unique)   | suspensionoverride |
+      | Name                          | Suspension day     |
+      | Start year                    | 2020               |
+      | End year                      | 2050               |
+      | Include time?                 | 0                  |
+    And I click on "Save changes" "button"
+    And I navigate to "Users > Hard life cycle for self-signup users > Settings" in site administration
+    And I set the field "User suspension override profile field" to "Suspension day"
+    # Leave deletion override field empty
+    And I click on "Save changes" "button"
+
+    And I navigate to "Users > Hard life cycle for self-signup users > User list" in site administration
+    And I click on "Edit" "link" in the "user1" "table_row"
+    And I expand all fieldsets
+    And I set the field "profile_field_suspensionoverride[enabled]" to "1"
+    And I set the field "profile_field_suspensionoverride[day]" to "1"
+    And I set the field "profile_field_suspensionoverride[month]" to "1"
+    And I set the field "profile_field_suspensionoverride[year]" to "2050"
+    And I click on "Update profile" "button"
+
+    And I navigate to "Users > Hard life cycle for self-signup users > User list" in site administration
+    And I run the scheduled task "tool_selfsignuphardlifecycle\task\process_lifecycle"
+    And I reload the page
+    Then I should see "Active" in the "user1" "table_row"
+    And I should see "Will be suspended" in the "user1" "table_row"
+    And I should not see "user2" in the "#region-main" "css_element"
+    And I navigate to "Users > Accounts > Browse list of users" in site administration
+    Then I should see "User 1" in the "Users" "table"
+    And I should not see "Suspended" in the "User 1" "table_row"
+    And I should not see "User 2" in the "Users" "table"
+
+  @javascript
   Scenario: Users from ignored cohorts remain untouched by the tool
     Given the following config values are set as admin:
       | enableusersuspension | 0   | tool_selfsignuphardlifecycle |
