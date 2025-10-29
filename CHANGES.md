@@ -4,7 +4,7 @@ moodle-tool_selfsignuphardlifecycle
 Changes
 -------
 
-### Unreleased
+### v4.5-r3
 
 * 2025-10-29 - Bugfix: The SQL query in the scheduled task was hardened to avoid exceptions if only one override field was set, resolves #3
 
