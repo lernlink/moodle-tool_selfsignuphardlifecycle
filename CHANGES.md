@@ -4,7 +4,7 @@ moodle-tool_selfsignuphardlifecycle
 Changes
 -------
 
-### Unreleased
+### v5.2-r1
 
 * 2026-08-13 - Prepare compatibility for Moodle 5.2.
 
