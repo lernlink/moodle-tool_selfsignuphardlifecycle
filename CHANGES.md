@@ -4,6 +4,10 @@ moodle-tool_selfsignuphardlifecycle
 Changes
 -------
 
+### Unreleased
+
+* 2026-08-17 - Cleanup: Adopt the new Moodle Marketplace URL in README.md
+
 ### v5.2-r1
 
 * 2026-08-13 - Prepare compatibility for Moodle 5.2.

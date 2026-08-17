@@ -98,8 +98,8 @@ It should also work with Boost child themes, including Moodle Core's Classic the
 Plugin repositories
 -------------------
 
-This plugin is published and regularly updated in the Moodle plugins repository:
-http://moodle.org/plugins/view/tool_selfsignuphardlifecycle
+This plugin is published and regularly updated in the Moodle Marketplace:
+https://marketplace.moodle.com/plugins/tool_selfsignuphardlifecycle
 
 The latest development version can be found on Github:
 https://github.com/lernlink/moodle-tool_selfsignuphardlifecycle
@@ -139,7 +139,7 @@ Moodle release support
 
 This plugin is only maintained for the most recent major release of Moodle as well as the most recent LTS release of Moodle. Bugfixes are backported to the LTS release. However, new features and improvements are not necessarily backported to the LTS release.
 
-Apart from these maintained releases, previous versions of this plugin which work in legacy major releases of Moodle are still available as-is without any further updates in the Moodle Plugins repository.
+Apart from these maintained releases, previous versions of this plugin which work in legacy major releases of Moodle are still available as-is without any further updates in the Moodle Marketplace.
 
 There may be several weeks after a new major release of Moodle has been published until we can do a compatibility check and fix problems if necessary. If you encounter problems with a new major release of Moodle - or can confirm that this plugin still works with a new major release - please let us know on Github.
 
